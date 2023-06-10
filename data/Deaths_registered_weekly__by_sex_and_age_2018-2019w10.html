@@ -1,0 +1,586 @@
+<html><head><meta charset="utf-8" /><title>Tabel export: Deaths registered weekly, by sex and age</title></head><body><div class="subtitle-container" ng-attr-data-printprefixtitle="{{ 'dictionary.Title' | translate }}" data-printprefixtitle="Title">
+            <h1 class="title ng-binding">Deaths registered weekly, by sex and age</h1>
+            <div class="modifiedDate-container">
+                <h5 class="modifiedDate ng-binding">Changed on: 21 January 2022</h5>
+            </div>
+        </div><style type="text/css">h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 { font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; font-weight: 500; line-height: 1.1; } a:hover, a:focus { color: #2A6496; text-decoration: underline; } a:active, a:hover { outline: 0px none; } a { color: #428BCA; text-decoration: none; } /*@-ms-viewport {width:auto!important} http://windowssecrets.com/forums/showthread.php/168281-Disappearing-scrollbar-in-IE11 */
+/*  TODO: Download.less maken voor styling in downloads, onderstaande h1 daarheen verplaatsen */
+.title {
+  font-family: "Akko Regular W01", Helvetica, Arial, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #163a72;
+}
+#pivotTableOutput {
+  margin: 150px 20px 20px 20px;
+}
+#pivotTableInfo {
+  display: none;
+}
+#pivotTableInfo.bordered {
+  display: block;
+  background-color: #d1ecf1;
+  border: 1px solid #0c5460;
+  margin-top: 10px;
+  color: #0c5460;
+}
+#pivotTableInfo.bordered .btn-small {
+  color: #0c5460;
+  border: none;
+  margin: 10px 10px 0 0;
+  cursor: pointer;
+}
+#pivotTableInfo #pivotInfoText {
+  font-family: "Akko Regular W01", Helvetica, Arial, sans-serif;
+  padding-left: 10px;
+}
+.pivotTableInfo {
+  display: none;
+}
+.pivotTableInfo.bordered {
+  display: block;
+  background-color: #d1ecf1;
+  border: 1px solid #0c5460;
+  margin-top: 10px;
+  color: #0c5460;
+}
+.pivotTableInfo.bordered .btn-small {
+  color: #0c5460;
+  border: none;
+  margin: 10px 10px 0 0;
+  cursor: pointer;
+}
+.pivotTableInfo .pivotInfoText {
+  font-family: "Akko Regular W01", Helvetica, Arial, sans-serif;
+  padding-left: 10px;
+}
+.pivotTableWarning {
+  display: none;
+}
+.pivotTableWarning.bordered {
+  display: block;
+  background-color: #fff3cd;
+  border: 1px solid #856404;
+  margin: 10px 0;
+  color: #856404;
+}
+.pivotTableWarning.bordered .btn-small {
+  color: #856404;
+  border: none;
+  margin: 10px 10px 0 0;
+  cursor: pointer;
+}
+.pivotTableWarning h3 {
+  margin-top: 15px;
+  color: #856404;
+}
+.pivotTableWarning .pivotWarningText {
+  font-family: "Akko Regular W01", Helvetica, Arial, sans-serif;
+  padding-left: 10px;
+}
+#pivotTablePanel {
+  border: 0;
+  margin-bottom: 0;
+}
+#pivotTablePanel .tooltip-arrow {
+  border-top-color: #163a72;
+  border-bottom-color: #163a72;
+}
+#pivotTablePanel .tooltip-inner {
+  white-space: normal;
+  background-color: #163a72;
+  padding: 8px;
+  color: #fff;
+  font-family: "Akko Regular W01", Helvetica, Arial, sans-serif;
+  font-size: 100%;
+  text-align: left;
+}
+div .maincontent #pivotTableOutput {
+  margin: -10px 3px 0 0;
+  padding-top: 10px;
+}
+.pvtUi {
+  color: #000;
+}
+.pvtAttr {
+  font-weight: bold;
+}
+table.pvtTable {
+  font-size: 12px;
+  text-align: left;
+  border-collapse: collapse;
+}
+table.pvtTable thead th {
+  border-bottom: 1px solid #ececec;
+}
+table.pvtTable thead th.pvtContainer {
+  border-bottom: none;
+}
+table.pvtTable th.lastcol {
+  padding-right: 15px;
+}
+table.pvtTable th.pvtUpperLeftCorner {
+  border: 1px solid #fff;
+}
+table.pvtTable td.lastcol {
+  padding-right: 15px;
+}
+table.pvtTable tbody tr.first th {
+  border-top: 1px solid #ececec;
+  margin-top: 5px;
+}
+table.pvtTable tr th {
+  background-color: #fff;
+  font-size: 12px;
+  padding-left: 5px;
+  padding-right: 5px;
+  font-weight: normal;
+}
+table.pvtTable tr th.pvtColLabelUnit {
+  background-color: #fff;
+  font-weight: bold;
+  vertical-align: bottom;
+  border-bottom: none;
+}
+table.pvtTable tr th.spacer {
+  background-color: inherit;
+  border-bottom: 1px solid #777777;
+}
+table.pvtTable tr td {
+  color: #000;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: bottom;
+  text-align: right;
+  white-space: nowrap;
+}
+table.pvtTable tr.last td,
+table.pvtTable tr.last th {
+  border-bottom: 1px solid #ececec;
+}
+table.pvtTable tr.first .pvtRowLabel.topics {
+  border-top: 1px solid #ececec;
+}
+table.pvtTable .pvtContainer div.topic {
+  margin-left: 0;
+  font-weight: normal;
+}
+table.pvtTable .pvtContainer div.topicgroup {
+  margin-left: 0;
+  font-weight: normal;
+}
+table.pvtTable .pvtContainer > div .topic {
+  font-weight: normal;
+}
+table.pvtTable .pvtContainer .pvtAttrSingle > div .topic {
+  margin-left: 0;
+  margin-top: 0;
+}
+table.pvtTable .pvtContainer .pvtAttrSingle > div .topicgroup {
+  margin-left: 0;
+  margin-top: 0;
+  font-weight: bold;
+}
+table.pvtTable .pvtContainer .pvtAttrSingle > div .topicgroup > div.topic {
+  margin-left: 0;
+  margin-top: 0;
+}
+table.pvtTable .pvtContainer .pvtAttrSingle > div .topicgroup > div.topicgroup {
+  margin-left: 0;
+  margin-top: 0;
+}
+table.pvtTable .pvtRowLabel {
+  background-color: #ececec;
+  text-align: left;
+  vertical-align: top;
+  white-space: nowrap;
+}
+table.pvtTable .pvtRowLabel div.topic {
+  margin-left: 12px;
+  font-weight: normal;
+}
+table.pvtTable .pvtRowLabel div.topicgroup {
+  margin-left: 12px;
+  font-weight: normal;
+}
+table.pvtTable .pvtRowLabel > div.topic {
+  margin-left: 0;
+  margin-top: 0;
+  font-weight: normal;
+  padding-top: 5px;
+}
+table.pvtTable .pvtRowLabel > div.topicgroup {
+  margin-left: 0;
+  margin-top: 0;
+  font-weight: bold;
+}
+table.pvtTable .pvtRowLabel > div.topicgroup > div.topic {
+  margin-left: 0;
+  margin-top: 0;
+}
+table.pvtTable .pvtRowLabel > div.topicgroup > div.topicgroup {
+  margin-left: 0;
+  margin-top: 0;
+}
+table.pvtTable .pvtRowLabel.topics {
+  border-bottom-style: none;
+  border-top-style: none;
+}
+table.pvtTable .pvtRowLabel.notopics {
+  padding-top: 5px;
+}
+table.pvtTable .pvtRowLabel.last {
+  border-bottom: 1px solid #ececec;
+}
+table.pvtTable .pvtRowLabel .topicgroup.start {
+  padding-top: 5px;
+}
+table.pvtTable .pvtColLabel {
+  border-bottom: 1px solid #ececec;
+  text-align: left;
+  vertical-align: bottom;
+}
+table.pvtTable .pvtColLabel div.topic {
+  margin-left: 12px;
+  font-weight: normal;
+}
+table.pvtTable .pvtColLabel div.topicgroup {
+  margin-left: 12px;
+  font-weight: normal;
+}
+table.pvtTable .pvtColLabel > div.topic {
+  margin-left: 0;
+  margin-top: 0;
+  font-weight: normal;
+}
+table.pvtTable .pvtColLabel > div.topicgroup {
+  margin-left: 0;
+  margin-top: 0;
+  font-weight: bold;
+}
+table.pvtTable .pvtColLabel > div.topicgroup > div.topic {
+  margin-left: 0;
+  margin-top: 0;
+}
+table.pvtTable .pvtColLabel > div.topicgroup > div.topicgroup {
+  margin-left: 0;
+  margin-top: 0;
+}
+table.pvtTable .pvtColLabel.toprow {
+  font-weight: bold;
+  border-right: 5px solid #fff;
+  padding-left: 1px;
+}
+table.pvtTable .pvtColLabel.toprow > div.topic {
+  font-weight: bold;
+  border-right: 5px solid #fff;
+  padding-left: 1px;
+}
+table.pvtTable .pvtColLabel.toprow:nth-child(2) {
+  padding-left: 5px;
+}
+table.pvtTable .pvtColLabel.bottomrow {
+  text-align: right;
+}
+.pvtAggregator {
+  margin-bottom: 5px ;
+}
+.pvtRendererAxisContainer {
+  border: 0 none;
+  margin: 0;
+  padding: 0;
+}
+.pvtRendererAxisContainer li {
+  display: inline-block;
+  list-style-type: none;
+  background-color: #fff;
+  padding: 0;
+  border: 2px solid #ececec;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+.pvtRendererAxisContainer li > span {
+  display: table-cell;
+  vertical-align: top;
+}
+.pvtRendererAxisContainer li .pvtAttr {
+  text-align: right;
+  -webkit-user-select: none;
+  /* Chrome all / Safari all */
+  -moz-user-select: none;
+  /* Firefox all */
+  -ms-user-select: none;
+  /* IE 10+ */
+  user-select: none;
+  background-color: #ececec;
+  padding: 4px;
+  white-space: nowrap;
+  cursor: move;
+  margin: 0;
+}
+.pvtRendererAxisContainer li .ui-draggable-dragging {
+  max-height: 30px;
+  border: 2px solid #0581a2;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+.pvtRendererAxisContainer li .pvtAttrSingle {
+  padding-left: 4px;
+  padding-top: 4px;
+  -webkit-user-select: none;
+  /* Chrome all / Safari all */
+  -moz-user-select: none;
+  /* Firefox all */
+  -ms-user-select: none;
+  /* IE 10+ */
+  user-select: none;
+  white-space: nowrap;
+  cursor: default;
+}
+.pvtRendererAxisContainer li .pvtAttrEditHandle {
+  background-color: #fff;
+  white-space: nowrap;
+  vertical-align: middle;
+  font-family: FontAwesome;
+  font-weight: normal;
+  font-size: 10pt;
+  cursor: pointer;
+  padding: 0 4px 0 4px;
+}
+.pvtRendererAxisContainer li.dragging {
+  opacity: 0.5;
+}
+.pvtRendererAxisContainer li.ignore {
+  min-width: 60px;
+  border-color: #fff;
+  cursor: default;
+}
+.pvtRendererAxisContainer li.ui-state-highlight {
+  background-color: transparent;
+  -webkit-border-radius: 5px;
+  padding: 6px 3px 3px 3px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  border: 2px dotted #0581a2;
+  min-width: 60px;
+}
+.pvtRendererAxisContainer li.drop-hover {
+  background-color: #fff;
+  border: 2px solid #0581a2;
+  padding: 6px 3px 3px 3px;
+  min-width: 60px;
+}
+.pvtRendererAxisContainer li.sortable-chosen span .pvtAttrSingle {
+  display: none;
+}
+.pvtRendererAxisContainer li.pvtPlaceholder {
+  -webkit-border-radius: 5px;
+  padding: 3px 3px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  border: 1px dashed #000;
+}
+.pvtRendererAxisContainer.vals li.ignore {
+  padding: 0;
+}
+.pvtHorizList {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-wrap: nowrap;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+}
+.pvtHorizList li {
+  margin-right: 4px;
+  margin-bottom: 5px;
+}
+.pvtContainer div.bottomborder {
+  margin-top: 6px;
+  border-bottom: 1px solid #ececec;
+}
+.pvtVertList {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-flex-wrap: nowrap;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+}
+.pvtVertList li {
+  margin-top: 5px;
+}
+.pvtVals {
+  border: 0 none;
+  margin: 0;
+  padding: 0;
+}
+.pvtAxisContainer li.ignore {
+  min-width: 60px;
+  border-color: #fff;
+  cursor: default;
+}
+.pvtAxisContainer li.pvtPlaceholder {
+  -webkit-border-radius: 5px;
+  padding: 3px 3px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  border: 1px dashed #000;
+}
+li.sortable-chosen span.pvtAttrEditHandle {
+  display: none;
+}
+td.pvtRendererAxisContainer.pvtRows,
+td.pvtAxisContainer.pvtRows {
+  vertical-align: top;
+}
+.pvtTriangle {
+  cursor: pointer;
+  color: grey;
+}
+.pvtFilteredAttribute {
+  font-style: italic;
+}
+.pvtFilterBox {
+  z-index: 100;
+  width: 280px;
+  border: 1px solid #777777;
+  background-color: #fff;
+  position: absolute;
+  padding: 20px;
+  text-align: center;
+}
+.pvtFilterBox h4 {
+  margin: 0;
+}
+.pvtFilterBox p {
+  margin: 1em auto;
+}
+.pvtFilterBox label {
+  font-weight: normal;
+}
+.pvtFilterBox input[type='checkbox'] {
+  margin-right: 5px;
+}
+.pvtCheckContainer {
+  text-align: left;
+  overflow: scroll;
+  max-height: 200px;
+}
+.pvtCheckContainer p {
+  margin: 5px;
+}
+.pvtRendererArea {
+  padding: 5px;
+}
+.pvtRenderer {
+  display: none;
+}
+#bron {
+  padding: 4px 0 0 5px;
+}
+@media (max-width: 767px) {
+  #bron {
+    padding-left: 2px;
+  }
+  table.pvtTable {
+    margin-left: 12px;
+  }
+  div.maincontent #pivotTableOutput {
+    margin: -10px 0 0 -15px;
+  }
+}
+body { font-family: Arial, sans-serif; } .subtitle { padding: 12px 20px 12px 32px; color: #163a72; font-size: 16px; width: auto; margin: 0; } @media(min-width: 992px) { .subtitle { border-radius: 0 8px 8px 0; width: auto; display: inline-block; }} span.pvtAttrEditHandle, .pvtRendererAxisContainer li, .pvtAxisContainer li { cursor: inherit; } .source { padding: 12px ; font-size: 8pt; font-family: Arial, sans-serif; } span.pvtAttrEditHandle { visibility: hidden; display:none; } .pvtVertList { text-align:left;} th { text-align: left;} .modifiedDate { padding: 0px 20px 0px 32px; background-color: white; color: #163a72; font-size: 12px; border-left: none; border-right: none; width: auto; display: block; margin: 0; height: 26px; line-height: 26px; } @media(max-width: 767px) { .modifiedDate { padding: 0px 20px 0px 32px; background-color: white; color: #163a72; font-size: 12px; border: 1px solid #ececec; border-left: none; border-right: none; margin: 0; width: auto; display: block; line-height: 26px; }} @media(min-width: 992px) { .modifiedDate { padding: 0px 20px 0px 32px; background-color: white; color: #163a72; font-size: 12px; border: 1px solid #ececec; border-left: none; border-right: none; width: auto; display: inline-block; margin: 0; line-height: 26px; }} .modifiedDate-container { margin-bottom: 30px; margin-top: -1px; } .alert-info { color: #3a87ad; background-color: #d9edf7; border-color: #bce8f1; }.alert { padding: 15px; margin-bottom: 20px; border: 1px solid transparent; border-radius: 4px; font-size: 12px; }h5.onderwerp { font-size: 8pt; font-style: italic; font-weight: normal; } pre { font-family: inherit; font-weight: normal; word-break: inherit; word-wrap: inherit; }</style><table class="pvtTable" data-numrows="63" data-numcols="8"><thead><tr><th class="pvtContainer" rowspan="1" colspan="10"><ul class="pvtRendererAxisContainer pvtVertList vals clearfix"><li class="axis_1"><span class="pvtAttr ui-draggable ui-draggable-handle" style="width: 34.525px;">Topic</span><span class="pvtAttrSingle" style="width: 40.2px;"><div class="topic" data-key="Deaths_1" title="" data-placement="auto" data-original-title="Number of deceased persons who were counted among the population of the Netherlands.<br /><br />Deceased person <br />Person confirmed dead by an authorised medical practitioner by the signing of a death certificate.<br /><br />Population<br />The total number of people residing in a given area.<br />Only persons recorded in the population register of a Dutch municipality are included in the population. In principle, every person who lives in the Netherlands for an indefinite period...<br /><br /><i>Click i button for full info</i>">Deaths</div></span><span class="pvtAttrEditHandle">&nbsp;</span></li><li class="ignore"></li></ul></th></tr><tr><th class="spacer" rowspan="1" colspan="10"></th></tr><tr><th class="pvtUpperLeftCorner" colspan="2" rowspan="1"></th><th class="pvtContainer" colspan="8" rowspan="1"><ul class="pvtRendererAxisContainer pvtHorizList cols clearfix"><li class="axis_0"><span class="pvtAttr ui-draggable ui-draggable-handle">Age, 31 December</span><span class="pvtAttrEditHandle">&nbsp;</span></li><li class="axis_1"><span class="pvtAttr ui-draggable ui-draggable-handle">Sex</span><span class="pvtAttrEditHandle">&nbsp;</span></li><li class="ignore"></li></ul><div class="bottomborder"></div></th></tr><tr><th class="pvtContainer left" colspan="2" rowspan="3"><ul class="pvtRendererAxisContainer pvtVertList rows clearfix"><li class="axis_2"><span class="pvtAttr ui-draggable ui-draggable-handle" style="width: 46.775px;">Periods</span><span class="pvtAttrEditHandle">&nbsp;</span></li><li class="ignore"></li></ul></th><th class="pvtColLabel toprow" colspan="2"><div data-placement="auto" data-original-title="" title="">Total</div></th><th class="pvtColLabel toprow" colspan="2"><div data-placement="auto" data-original-title="" title="">0 to 64 years</div></th><th class="pvtColLabel toprow" colspan="2"><div data-placement="auto" data-original-title="" title="">65 to 79 years</div></th><th class="pvtColLabel toprow lastcol" colspan="2"><div data-placement="auto" data-original-title="" title="">80 years or older</div></th></tr><tr><th class="pvtColLabel bottomrow" colspan="1"><div data-placement="auto" data-original-title="" title="">Male</div></th><th class="pvtColLabel bottomrow lastcol" colspan="1"><div data-placement="auto" data-original-title="" title="">Female</div></th><th class="pvtColLabel bottomrow" colspan="1"><div data-placement="auto" data-original-title="" title="">Male</div></th><th class="pvtColLabel bottomrow lastcol" colspan="1"><div data-placement="auto" data-original-title="" title="">Female</div></th><th class="pvtColLabel bottomrow" colspan="1"><div data-placement="auto" data-original-title="" title="">Male</div></th><th class="pvtColLabel bottomrow lastcol" colspan="1"><div data-placement="auto" data-original-title="" title="">Female</div></th><th class="pvtColLabel bottomrow" colspan="1"><div data-placement="auto" data-original-title="" title="">Male</div></th><th class="pvtColLabel bottomrow" colspan="1"><div data-placement="auto" data-original-title="" title="">Female</div></th></tr><tr><th class="pvtColLabelUnit" colspan="8">aantal</th></tr></thead><tbody><tr class="first"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 1</div></th><td class="pvtVal row0 col0" data-value="1,557">1,557</td><td class="pvtVal row0 col1 lastcol" data-value="1,786">1,786</td><td class="pvtVal row0 col2" data-value="271">271</td><td class="pvtVal row0 col3 lastcol" data-value="160">160</td><td class="pvtVal row0 col4" data-value="532">532</td><td class="pvtVal row0 col5 lastcol" data-value="400">400</td><td class="pvtVal row0 col6" data-value="754">754</td><td class="pvtVal row0 col7 last" data-value="1,226">1,226</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 2</div></th><td class="pvtVal row1 col0" data-value="1,592">1,592</td><td class="pvtVal row1 col1 lastcol" data-value="1,767">1,767</td><td class="pvtVal row1 col2" data-value="240">240</td><td class="pvtVal row1 col3 lastcol" data-value="166">166</td><td class="pvtVal row1 col4" data-value="508">508</td><td class="pvtVal row1 col5 lastcol" data-value="418">418</td><td class="pvtVal row1 col6" data-value="844">844</td><td class="pvtVal row1 col7 last" data-value="1,183">1,183</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 3</div></th><td class="pvtVal row2 col0" data-value="1,620">1,620</td><td class="pvtVal row2 col1 lastcol" data-value="1,744">1,744</td><td class="pvtVal row2 col2" data-value="240">240</td><td class="pvtVal row2 col3 lastcol" data-value="183">183</td><td class="pvtVal row2 col4" data-value="581">581</td><td class="pvtVal row2 col5 lastcol" data-value="402">402</td><td class="pvtVal row2 col6" data-value="799">799</td><td class="pvtVal row2 col7 last" data-value="1,159">1,159</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 4</div></th><td class="pvtVal row3 col0" data-value="1,650">1,650</td><td class="pvtVal row3 col1 lastcol" data-value="1,672">1,672</td><td class="pvtVal row3 col2" data-value="245">245</td><td class="pvtVal row3 col3 lastcol" data-value="163">163</td><td class="pvtVal row3 col4" data-value="550">550</td><td class="pvtVal row3 col5 lastcol" data-value="386">386</td><td class="pvtVal row3 col6" data-value="855">855</td><td class="pvtVal row3 col7 last" data-value="1,123">1,123</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 5</div></th><td class="pvtVal row4 col0" data-value="1,559">1,559</td><td class="pvtVal row4 col1 lastcol" data-value="1,844">1,844</td><td class="pvtVal row4 col2" data-value="264">264</td><td class="pvtVal row4 col3 lastcol" data-value="192">192</td><td class="pvtVal row4 col4" data-value="530">530</td><td class="pvtVal row4 col5 lastcol" data-value="391">391</td><td class="pvtVal row4 col6" data-value="765">765</td><td class="pvtVal row4 col7 last" data-value="1,261">1,261</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 6</div></th><td class="pvtVal row5 col0" data-value="1,640">1,640</td><td class="pvtVal row5 col1 lastcol" data-value="1,873">1,873</td><td class="pvtVal row5 col2" data-value="253">253</td><td class="pvtVal row5 col3 lastcol" data-value="190">190</td><td class="pvtVal row5 col4" data-value="552">552</td><td class="pvtVal row5 col5 lastcol" data-value="418">418</td><td class="pvtVal row5 col6" data-value="835">835</td><td class="pvtVal row5 col7 last" data-value="1,265">1,265</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 7</div></th><td class="pvtVal row6 col0" data-value="1,780">1,780</td><td class="pvtVal row6 col1 lastcol" data-value="1,880">1,880</td><td class="pvtVal row6 col2" data-value="260">260</td><td class="pvtVal row6 col3 lastcol" data-value="167">167</td><td class="pvtVal row6 col4" data-value="600">600</td><td class="pvtVal row6 col5 lastcol" data-value="470">470</td><td class="pvtVal row6 col6" data-value="920">920</td><td class="pvtVal row6 col7 last" data-value="1,243">1,243</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 8</div></th><td class="pvtVal row7 col0" data-value="1,750">1,750</td><td class="pvtVal row7 col1 lastcol" data-value="1,941">1,941</td><td class="pvtVal row7 col2" data-value="253">253</td><td class="pvtVal row7 col3 lastcol" data-value="181">181</td><td class="pvtVal row7 col4" data-value="595">595</td><td class="pvtVal row7 col5 lastcol" data-value="452">452</td><td class="pvtVal row7 col6" data-value="902">902</td><td class="pvtVal row7 col7 last" data-value="1,308">1,308</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 9</div></th><td class="pvtVal row8 col0" data-value="1,868">1,868</td><td class="pvtVal row8 col1 lastcol" data-value="2,069">2,069</td><td class="pvtVal row8 col2" data-value="261">261</td><td class="pvtVal row8 col3 lastcol" data-value="207">207</td><td class="pvtVal row8 col4" data-value="652">652</td><td class="pvtVal row8 col5 lastcol" data-value="459">459</td><td class="pvtVal row8 col6" data-value="955">955</td><td class="pvtVal row8 col7 last" data-value="1,403">1,403</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 10</div></th><td class="pvtVal row9 col0" data-value="1,904">1,904</td><td class="pvtVal row9 col1 lastcol" data-value="2,188">2,188</td><td class="pvtVal row9 col2" data-value="276">276</td><td class="pvtVal row9 col3 lastcol" data-value="188">188</td><td class="pvtVal row9 col4" data-value="656">656</td><td class="pvtVal row9 col5 lastcol" data-value="458">458</td><td class="pvtVal row9 col6" data-value="972">972</td><td class="pvtVal row9 col7 last" data-value="1,542">1,542</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 11</div></th><td class="pvtVal row10 col0" data-value="1,759">1,759</td><td class="pvtVal row10 col1 lastcol" data-value="1,974">1,974</td><td class="pvtVal row10 col2" data-value="256">256</td><td class="pvtVal row10 col3 lastcol" data-value="189">189</td><td class="pvtVal row10 col4" data-value="607">607</td><td class="pvtVal row10 col5 lastcol" data-value="438">438</td><td class="pvtVal row10 col6" data-value="896">896</td><td class="pvtVal row10 col7 last" data-value="1,347">1,347</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 12</div></th><td class="pvtVal row11 col0" data-value="1,691">1,691</td><td class="pvtVal row11 col1 lastcol" data-value="1,739">1,739</td><td class="pvtVal row11 col2" data-value="239">239</td><td class="pvtVal row11 col3 lastcol" data-value="199">199</td><td class="pvtVal row11 col4" data-value="578">578</td><td class="pvtVal row11 col5 lastcol" data-value="369">369</td><td class="pvtVal row11 col6" data-value="874">874</td><td class="pvtVal row11 col7 last" data-value="1,171">1,171</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 13</div></th><td class="pvtVal row12 col0" data-value="1,560">1,560</td><td class="pvtVal row12 col1 lastcol" data-value="1,665">1,665</td><td class="pvtVal row12 col2" data-value="245">245</td><td class="pvtVal row12 col3 lastcol" data-value="166">166</td><td class="pvtVal row12 col4" data-value="532">532</td><td class="pvtVal row12 col5 lastcol" data-value="365">365</td><td class="pvtVal row12 col6" data-value="783">783</td><td class="pvtVal row12 col7 last" data-value="1,134">1,134</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 14</div></th><td class="pvtVal row13 col0" data-value="1,445">1,445</td><td class="pvtVal row13 col1 lastcol" data-value="1,595">1,595</td><td class="pvtVal row13 col2" data-value="250">250</td><td class="pvtVal row13 col3 lastcol" data-value="195">195</td><td class="pvtVal row13 col4" data-value="507">507</td><td class="pvtVal row13 col5 lastcol" data-value="395">395</td><td class="pvtVal row13 col6" data-value="688">688</td><td class="pvtVal row13 col7 last" data-value="1,005">1,005</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 15</div></th><td class="pvtVal row14 col0" data-value="1,345">1,345</td><td class="pvtVal row14 col1 lastcol" data-value="1,515">1,515</td><td class="pvtVal row14 col2" data-value="217">217</td><td class="pvtVal row14 col3 lastcol" data-value="185">185</td><td class="pvtVal row14 col4" data-value="478">478</td><td class="pvtVal row14 col5 lastcol" data-value="368">368</td><td class="pvtVal row14 col6" data-value="650">650</td><td class="pvtVal row14 col7 last" data-value="962">962</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 16</div></th><td class="pvtVal row15 col0" data-value="1,313">1,313</td><td class="pvtVal row15 col1 lastcol" data-value="1,447">1,447</td><td class="pvtVal row15 col2" data-value="195">195</td><td class="pvtVal row15 col3 lastcol" data-value="185">185</td><td class="pvtVal row15 col4" data-value="516">516</td><td class="pvtVal row15 col5 lastcol" data-value="358">358</td><td class="pvtVal row15 col6" data-value="602">602</td><td class="pvtVal row15 col7 last" data-value="904">904</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 17</div></th><td class="pvtVal row16 col0" data-value="1,279">1,279</td><td class="pvtVal row16 col1 lastcol" data-value="1,384">1,384</td><td class="pvtVal row16 col2" data-value="233">233</td><td class="pvtVal row16 col3 lastcol" data-value="167">167</td><td class="pvtVal row16 col4" data-value="506">506</td><td class="pvtVal row16 col5 lastcol" data-value="323">323</td><td class="pvtVal row16 col6" data-value="540">540</td><td class="pvtVal row16 col7 last" data-value="894">894</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 18</div></th><td class="pvtVal row17 col0" data-value="1,314">1,314</td><td class="pvtVal row17 col1 lastcol" data-value="1,331">1,331</td><td class="pvtVal row17 col2" data-value="234">234</td><td class="pvtVal row17 col3 lastcol" data-value="161">161</td><td class="pvtVal row17 col4" data-value="448">448</td><td class="pvtVal row17 col5 lastcol" data-value="319">319</td><td class="pvtVal row17 col6" data-value="632">632</td><td class="pvtVal row17 col7 last" data-value="851">851</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 19</div></th><td class="pvtVal row18 col0" data-value="1,342">1,342</td><td class="pvtVal row18 col1 lastcol" data-value="1,299">1,299</td><td class="pvtVal row18 col2" data-value="227">227</td><td class="pvtVal row18 col3 lastcol" data-value="144">144</td><td class="pvtVal row18 col4" data-value="463">463</td><td class="pvtVal row18 col5 lastcol" data-value="295">295</td><td class="pvtVal row18 col6" data-value="652">652</td><td class="pvtVal row18 col7 last" data-value="860">860</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 20</div></th><td class="pvtVal row19 col0" data-value="1,277">1,277</td><td class="pvtVal row19 col1 lastcol" data-value="1,329">1,329</td><td class="pvtVal row19 col2" data-value="192">192</td><td class="pvtVal row19 col3 lastcol" data-value="158">158</td><td class="pvtVal row19 col4" data-value="479">479</td><td class="pvtVal row19 col5 lastcol" data-value="346">346</td><td class="pvtVal row19 col6" data-value="606">606</td><td class="pvtVal row19 col7 last" data-value="825">825</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 21</div></th><td class="pvtVal row20 col0" data-value="1,302">1,302</td><td class="pvtVal row20 col1 lastcol" data-value="1,372">1,372</td><td class="pvtVal row20 col2" data-value="228">228</td><td class="pvtVal row20 col3 lastcol" data-value="163">163</td><td class="pvtVal row20 col4" data-value="480">480</td><td class="pvtVal row20 col5 lastcol" data-value="317">317</td><td class="pvtVal row20 col6" data-value="594">594</td><td class="pvtVal row20 col7 last" data-value="892">892</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 22</div></th><td class="pvtVal row21 col0" data-value="1,350">1,350</td><td class="pvtVal row21 col1 lastcol" data-value="1,426">1,426</td><td class="pvtVal row21 col2" data-value="237">237</td><td class="pvtVal row21 col3 lastcol" data-value="179">179</td><td class="pvtVal row21 col4" data-value="506">506</td><td class="pvtVal row21 col5 lastcol" data-value="351">351</td><td class="pvtVal row21 col6" data-value="607">607</td><td class="pvtVal row21 col7 last" data-value="896">896</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 23</div></th><td class="pvtVal row22 col0" data-value="1,313">1,313</td><td class="pvtVal row22 col1 lastcol" data-value="1,366">1,366</td><td class="pvtVal row22 col2" data-value="235">235</td><td class="pvtVal row22 col3 lastcol" data-value="164">164</td><td class="pvtVal row22 col4" data-value="487">487</td><td class="pvtVal row22 col5 lastcol" data-value="338">338</td><td class="pvtVal row22 col6" data-value="591">591</td><td class="pvtVal row22 col7 last" data-value="864">864</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 24</div></th><td class="pvtVal row23 col0" data-value="1,248">1,248</td><td class="pvtVal row23 col1 lastcol" data-value="1,309">1,309</td><td class="pvtVal row23 col2" data-value="209">209</td><td class="pvtVal row23 col3 lastcol" data-value="163">163</td><td class="pvtVal row23 col4" data-value="463">463</td><td class="pvtVal row23 col5 lastcol" data-value="334">334</td><td class="pvtVal row23 col6" data-value="576">576</td><td class="pvtVal row23 col7 last" data-value="812">812</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 25</div></th><td class="pvtVal row24 col0" data-value="1,301">1,301</td><td class="pvtVal row24 col1 lastcol" data-value="1,300">1,300</td><td class="pvtVal row24 col2" data-value="204">204</td><td class="pvtVal row24 col3 lastcol" data-value="158">158</td><td class="pvtVal row24 col4" data-value="467">467</td><td class="pvtVal row24 col5 lastcol" data-value="336">336</td><td class="pvtVal row24 col6" data-value="630">630</td><td class="pvtVal row24 col7 last" data-value="806">806</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 26</div></th><td class="pvtVal row25 col0" data-value="1,311">1,311</td><td class="pvtVal row25 col1 lastcol" data-value="1,308">1,308</td><td class="pvtVal row25 col2" data-value="243">243</td><td class="pvtVal row25 col3 lastcol" data-value="140">140</td><td class="pvtVal row25 col4" data-value="441">441</td><td class="pvtVal row25 col5 lastcol" data-value="343">343</td><td class="pvtVal row25 col6" data-value="627">627</td><td class="pvtVal row25 col7 last" data-value="825">825</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 27</div></th><td class="pvtVal row26 col0" data-value="1,326">1,326</td><td class="pvtVal row26 col1 lastcol" data-value="1,400">1,400</td><td class="pvtVal row26 col2" data-value="222">222</td><td class="pvtVal row26 col3 lastcol" data-value="184">184</td><td class="pvtVal row26 col4" data-value="485">485</td><td class="pvtVal row26 col5 lastcol" data-value="353">353</td><td class="pvtVal row26 col6" data-value="619">619</td><td class="pvtVal row26 col7 last" data-value="863">863</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 28</div></th><td class="pvtVal row27 col0" data-value="1,279">1,279</td><td class="pvtVal row27 col1 lastcol" data-value="1,392">1,392</td><td class="pvtVal row27 col2" data-value="224">224</td><td class="pvtVal row27 col3 lastcol" data-value="184">184</td><td class="pvtVal row27 col4" data-value="475">475</td><td class="pvtVal row27 col5 lastcol" data-value="330">330</td><td class="pvtVal row27 col6" data-value="580">580</td><td class="pvtVal row27 col7 last" data-value="878">878</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 29</div></th><td class="pvtVal row28 col0" data-value="1,311">1,311</td><td class="pvtVal row28 col1 lastcol" data-value="1,393">1,393</td><td class="pvtVal row28 col2" data-value="224">224</td><td class="pvtVal row28 col3 lastcol" data-value="167">167</td><td class="pvtVal row28 col4" data-value="499">499</td><td class="pvtVal row28 col5 lastcol" data-value="311">311</td><td class="pvtVal row28 col6" data-value="588">588</td><td class="pvtVal row28 col7 last" data-value="915">915</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 30</div></th><td class="pvtVal row29 col0" data-value="1,344">1,344</td><td class="pvtVal row29 col1 lastcol" data-value="1,423">1,423</td><td class="pvtVal row29 col2" data-value="246">246</td><td class="pvtVal row29 col3 lastcol" data-value="159">159</td><td class="pvtVal row29 col4" data-value="470">470</td><td class="pvtVal row29 col5 lastcol" data-value="354">354</td><td class="pvtVal row29 col6" data-value="628">628</td><td class="pvtVal row29 col7 last" data-value="910">910</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 31</div></th><td class="pvtVal row30 col0" data-value="1,335">1,335</td><td class="pvtVal row30 col1 lastcol" data-value="1,425">1,425</td><td class="pvtVal row30 col2" data-value="245">245</td><td class="pvtVal row30 col3 lastcol" data-value="157">157</td><td class="pvtVal row30 col4" data-value="495">495</td><td class="pvtVal row30 col5 lastcol" data-value="372">372</td><td class="pvtVal row30 col6" data-value="595">595</td><td class="pvtVal row30 col7 last" data-value="896">896</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 32</div></th><td class="pvtVal row31 col0" data-value="1,339">1,339</td><td class="pvtVal row31 col1 lastcol" data-value="1,406">1,406</td><td class="pvtVal row31 col2" data-value="244">244</td><td class="pvtVal row31 col3 lastcol" data-value="180">180</td><td class="pvtVal row31 col4" data-value="497">497</td><td class="pvtVal row31 col5 lastcol" data-value="330">330</td><td class="pvtVal row31 col6" data-value="598">598</td><td class="pvtVal row31 col7 last" data-value="896">896</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 33</div></th><td class="pvtVal row32 col0" data-value="1,280">1,280</td><td class="pvtVal row32 col1 lastcol" data-value="1,325">1,325</td><td class="pvtVal row32 col2" data-value="231">231</td><td class="pvtVal row32 col3 lastcol" data-value="173">173</td><td class="pvtVal row32 col4" data-value="461">461</td><td class="pvtVal row32 col5 lastcol" data-value="324">324</td><td class="pvtVal row32 col6" data-value="588">588</td><td class="pvtVal row32 col7 last" data-value="828">828</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 34</div></th><td class="pvtVal row33 col0" data-value="1,321">1,321</td><td class="pvtVal row33 col1 lastcol" data-value="1,291">1,291</td><td class="pvtVal row33 col2" data-value="210">210</td><td class="pvtVal row33 col3 lastcol" data-value="165">165</td><td class="pvtVal row33 col4" data-value="506">506</td><td class="pvtVal row33 col5 lastcol" data-value="307">307</td><td class="pvtVal row33 col6" data-value="605">605</td><td class="pvtVal row33 col7 last" data-value="819">819</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 35</div></th><td class="pvtVal row34 col0" data-value="1,275">1,275</td><td class="pvtVal row34 col1 lastcol" data-value="1,252">1,252</td><td class="pvtVal row34 col2" data-value="247">247</td><td class="pvtVal row34 col3 lastcol" data-value="160">160</td><td class="pvtVal row34 col4" data-value="450">450</td><td class="pvtVal row34 col5 lastcol" data-value="358">358</td><td class="pvtVal row34 col6" data-value="578">578</td><td class="pvtVal row34 col7 last" data-value="734">734</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 36</div></th><td class="pvtVal row35 col0" data-value="1,286">1,286</td><td class="pvtVal row35 col1 lastcol" data-value="1,327">1,327</td><td class="pvtVal row35 col2" data-value="231">231</td><td class="pvtVal row35 col3 lastcol" data-value="186">186</td><td class="pvtVal row35 col4" data-value="459">459</td><td class="pvtVal row35 col5 lastcol" data-value="352">352</td><td class="pvtVal row35 col6" data-value="596">596</td><td class="pvtVal row35 col7 last" data-value="789">789</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 37</div></th><td class="pvtVal row36 col0" data-value="1,298">1,298</td><td class="pvtVal row36 col1 lastcol" data-value="1,241">1,241</td><td class="pvtVal row36 col2" data-value="220">220</td><td class="pvtVal row36 col3 lastcol" data-value="148">148</td><td class="pvtVal row36 col4" data-value="507">507</td><td class="pvtVal row36 col5 lastcol" data-value="312">312</td><td class="pvtVal row36 col6" data-value="571">571</td><td class="pvtVal row36 col7 last" data-value="781">781</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 38</div></th><td class="pvtVal row37 col0" data-value="1,325">1,325</td><td class="pvtVal row37 col1 lastcol" data-value="1,381">1,381</td><td class="pvtVal row37 col2" data-value="263">263</td><td class="pvtVal row37 col3 lastcol" data-value="165">165</td><td class="pvtVal row37 col4" data-value="478">478</td><td class="pvtVal row37 col5 lastcol" data-value="390">390</td><td class="pvtVal row37 col6" data-value="584">584</td><td class="pvtVal row37 col7 last" data-value="826">826</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 39</div></th><td class="pvtVal row38 col0" data-value="1,337">1,337</td><td class="pvtVal row38 col1 lastcol" data-value="1,359">1,359</td><td class="pvtVal row38 col2" data-value="251">251</td><td class="pvtVal row38 col3 lastcol" data-value="196">196</td><td class="pvtVal row38 col4" data-value="466">466</td><td class="pvtVal row38 col5 lastcol" data-value="338">338</td><td class="pvtVal row38 col6" data-value="620">620</td><td class="pvtVal row38 col7 last" data-value="825">825</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 40</div></th><td class="pvtVal row39 col0" data-value="1,373">1,373</td><td class="pvtVal row39 col1 lastcol" data-value="1,433">1,433</td><td class="pvtVal row39 col2" data-value="259">259</td><td class="pvtVal row39 col3 lastcol" data-value="182">182</td><td class="pvtVal row39 col4" data-value="477">477</td><td class="pvtVal row39 col5 lastcol" data-value="396">396</td><td class="pvtVal row39 col6" data-value="637">637</td><td class="pvtVal row39 col7 last" data-value="855">855</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 41</div></th><td class="pvtVal row40 col0" data-value="1,361">1,361</td><td class="pvtVal row40 col1 lastcol" data-value="1,399">1,399</td><td class="pvtVal row40 col2" data-value="240">240</td><td class="pvtVal row40 col3 lastcol" data-value="192">192</td><td class="pvtVal row40 col4" data-value="473">473</td><td class="pvtVal row40 col5 lastcol" data-value="359">359</td><td class="pvtVal row40 col6" data-value="648">648</td><td class="pvtVal row40 col7 last" data-value="848">848</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 42</div></th><td class="pvtVal row41 col0" data-value="1,334">1,334</td><td class="pvtVal row41 col1 lastcol" data-value="1,405">1,405</td><td class="pvtVal row41 col2" data-value="220">220</td><td class="pvtVal row41 col3 lastcol" data-value="164">164</td><td class="pvtVal row41 col4" data-value="491">491</td><td class="pvtVal row41 col5 lastcol" data-value="340">340</td><td class="pvtVal row41 col6" data-value="623">623</td><td class="pvtVal row41 col7 last" data-value="901">901</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 43</div></th><td class="pvtVal row42 col0" data-value="1,345">1,345</td><td class="pvtVal row42 col1 lastcol" data-value="1,326">1,326</td><td class="pvtVal row42 col2" data-value="267">267</td><td class="pvtVal row42 col3 lastcol" data-value="163">163</td><td class="pvtVal row42 col4" data-value="504">504</td><td class="pvtVal row42 col5 lastcol" data-value="353">353</td><td class="pvtVal row42 col6" data-value="574">574</td><td class="pvtVal row42 col7 last" data-value="810">810</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 44</div></th><td class="pvtVal row43 col0" data-value="1,373">1,373</td><td class="pvtVal row43 col1 lastcol" data-value="1,442">1,442</td><td class="pvtVal row43 col2" data-value="247">247</td><td class="pvtVal row43 col3 lastcol" data-value="161">161</td><td class="pvtVal row43 col4" data-value="523">523</td><td class="pvtVal row43 col5 lastcol" data-value="397">397</td><td class="pvtVal row43 col6" data-value="603">603</td><td class="pvtVal row43 col7 last" data-value="884">884</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 45</div></th><td class="pvtVal row44 col0" data-value="1,406">1,406</td><td class="pvtVal row44 col1 lastcol" data-value="1,392">1,392</td><td class="pvtVal row44 col2" data-value="226">226</td><td class="pvtVal row44 col3 lastcol" data-value="181">181</td><td class="pvtVal row44 col4" data-value="531">531</td><td class="pvtVal row44 col5 lastcol" data-value="376">376</td><td class="pvtVal row44 col6" data-value="649">649</td><td class="pvtVal row44 col7 last" data-value="835">835</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 46</div></th><td class="pvtVal row45 col0" data-value="1,332">1,332</td><td class="pvtVal row45 col1 lastcol" data-value="1,429">1,429</td><td class="pvtVal row45 col2" data-value="248">248</td><td class="pvtVal row45 col3 lastcol" data-value="183">183</td><td class="pvtVal row45 col4" data-value="477">477</td><td class="pvtVal row45 col5 lastcol" data-value="348">348</td><td class="pvtVal row45 col6" data-value="607">607</td><td class="pvtVal row45 col7 last" data-value="898">898</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 47</div></th><td class="pvtVal row46 col0" data-value="1,398">1,398</td><td class="pvtVal row46 col1 lastcol" data-value="1,461">1,461</td><td class="pvtVal row46 col2" data-value="223">223</td><td class="pvtVal row46 col3 lastcol" data-value="180">180</td><td class="pvtVal row46 col4" data-value="525">525</td><td class="pvtVal row46 col5 lastcol" data-value="403">403</td><td class="pvtVal row46 col6" data-value="650">650</td><td class="pvtVal row46 col7 last" data-value="878">878</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 48</div></th><td class="pvtVal row47 col0" data-value="1,407">1,407</td><td class="pvtVal row47 col1 lastcol" data-value="1,500">1,500</td><td class="pvtVal row47 col2" data-value="250">250</td><td class="pvtVal row47 col3 lastcol" data-value="173">173</td><td class="pvtVal row47 col4" data-value="515">515</td><td class="pvtVal row47 col5 lastcol" data-value="401">401</td><td class="pvtVal row47 col6" data-value="642">642</td><td class="pvtVal row47 col7 last" data-value="926">926</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 49</div></th><td class="pvtVal row48 col0" data-value="1,463">1,463</td><td class="pvtVal row48 col1 lastcol" data-value="1,505">1,505</td><td class="pvtVal row48 col2" data-value="239">239</td><td class="pvtVal row48 col3 lastcol" data-value="199">199</td><td class="pvtVal row48 col4" data-value="529">529</td><td class="pvtVal row48 col5 lastcol" data-value="376">376</td><td class="pvtVal row48 col6" data-value="695">695</td><td class="pvtVal row48 col7 last" data-value="930">930</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 50</div></th><td class="pvtVal row49 col0" data-value="1,512">1,512</td><td class="pvtVal row49 col1 lastcol" data-value="1,505">1,505</td><td class="pvtVal row49 col2" data-value="270">270</td><td class="pvtVal row49 col3 lastcol" data-value="200">200</td><td class="pvtVal row49 col4" data-value="572">572</td><td class="pvtVal row49 col5 lastcol" data-value="388">388</td><td class="pvtVal row49 col6" data-value="670">670</td><td class="pvtVal row49 col7 last" data-value="917">917</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 51</div></th><td class="pvtVal row50 col0" data-value="1,474">1,474</td><td class="pvtVal row50 col1 lastcol" data-value="1,567">1,567</td><td class="pvtVal row50 col2" data-value="246">246</td><td class="pvtVal row50 col3 lastcol" data-value="179">179</td><td class="pvtVal row50 col4" data-value="507">507</td><td class="pvtVal row50 col5 lastcol" data-value="421">421</td><td class="pvtVal row50 col6" data-value="721">721</td><td class="pvtVal row50 col7 last" data-value="967">967</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2018 week 52</div></th><td class="pvtVal row51 col0" data-value="1,405">1,405</td><td class="pvtVal row51 col1 lastcol" data-value="1,496">1,496</td><td class="pvtVal row51 col2" data-value="216">216</td><td class="pvtVal row51 col3 lastcol" data-value="192">192</td><td class="pvtVal row51 col4" data-value="530">530</td><td class="pvtVal row51 col5 lastcol" data-value="379">379</td><td class="pvtVal row51 col6" data-value="659">659</td><td class="pvtVal row51 col7 last" data-value="925">925</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div title="" data-placement="auto" data-original-title="Concerns 1 day of 2018 that falls in week 1 of 2019.">2018 week 53 (1 day)</div></th><td class="pvtVal row52 col0" data-value="213">213</td><td class="pvtVal row52 col1 lastcol" data-value="243">243</td><td class="pvtVal row52 col2" data-value="36">36</td><td class="pvtVal row52 col3 lastcol" data-value="30">30</td><td class="pvtVal row52 col4" data-value="91">91</td><td class="pvtVal row52 col5 lastcol" data-value="51">51</td><td class="pvtVal row52 col6" data-value="86">86</td><td class="pvtVal row52 col7 last" data-value="162">162</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 1 (6 days)</div></th><td class="pvtVal row53 col0" data-value="1,250">1,250</td><td class="pvtVal row53 col1 lastcol" data-value="1,356">1,356</td><td class="pvtVal row53 col2" data-value="192">192</td><td class="pvtVal row53 col3 lastcol" data-value="149">149</td><td class="pvtVal row53 col4" data-value="394">394</td><td class="pvtVal row53 col5 lastcol" data-value="321">321</td><td class="pvtVal row53 col6" data-value="664">664</td><td class="pvtVal row53 col7 last" data-value="886">886</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 2</div></th><td class="pvtVal row54 col0" data-value="1,578">1,578</td><td class="pvtVal row54 col1 lastcol" data-value="1,684">1,684</td><td class="pvtVal row54 col2" data-value="275">275</td><td class="pvtVal row54 col3 lastcol" data-value="188">188</td><td class="pvtVal row54 col4" data-value="488">488</td><td class="pvtVal row54 col5 lastcol" data-value="376">376</td><td class="pvtVal row54 col6" data-value="815">815</td><td class="pvtVal row54 col7 last" data-value="1,120">1,120</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 3</div></th><td class="pvtVal row55 col0" data-value="1,522">1,522</td><td class="pvtVal row55 col1 lastcol" data-value="1,630">1,630</td><td class="pvtVal row55 col2" data-value="218">218</td><td class="pvtVal row55 col3 lastcol" data-value="178">178</td><td class="pvtVal row55 col4" data-value="539">539</td><td class="pvtVal row55 col5 lastcol" data-value="389">389</td><td class="pvtVal row55 col6" data-value="765">765</td><td class="pvtVal row55 col7 last" data-value="1,063">1,063</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 4</div></th><td class="pvtVal row56 col0" data-value="1,545">1,545</td><td class="pvtVal row56 col1 lastcol" data-value="1,634">1,634</td><td class="pvtVal row56 col2" data-value="211">211</td><td class="pvtVal row56 col3 lastcol" data-value="209">209</td><td class="pvtVal row56 col4" data-value="512">512</td><td class="pvtVal row56 col5 lastcol" data-value="419">419</td><td class="pvtVal row56 col6" data-value="822">822</td><td class="pvtVal row56 col7 last" data-value="1,006">1,006</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 5</div></th><td class="pvtVal row57 col0" data-value="1,575">1,575</td><td class="pvtVal row57 col1 lastcol" data-value="1,564">1,564</td><td class="pvtVal row57 col2" data-value="264">264</td><td class="pvtVal row57 col3 lastcol" data-value="174">174</td><td class="pvtVal row57 col4" data-value="569">569</td><td class="pvtVal row57 col5 lastcol" data-value="375">375</td><td class="pvtVal row57 col6" data-value="742">742</td><td class="pvtVal row57 col7 last" data-value="1,015">1,015</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 6</div></th><td class="pvtVal row58 col0" data-value="1,589">1,589</td><td class="pvtVal row58 col1 lastcol" data-value="1,594">1,594</td><td class="pvtVal row58 col2" data-value="226">226</td><td class="pvtVal row58 col3 lastcol" data-value="174">174</td><td class="pvtVal row58 col4" data-value="553">553</td><td class="pvtVal row58 col5 lastcol" data-value="430">430</td><td class="pvtVal row58 col6" data-value="810">810</td><td class="pvtVal row58 col7 last" data-value="990">990</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 7</div></th><td class="pvtVal row59 col0" data-value="1,580">1,580</td><td class="pvtVal row59 col1 lastcol" data-value="1,674">1,674</td><td class="pvtVal row59 col2" data-value="240">240</td><td class="pvtVal row59 col3 lastcol" data-value="165">165</td><td class="pvtVal row59 col4" data-value="526">526</td><td class="pvtVal row59 col5 lastcol" data-value="389">389</td><td class="pvtVal row59 col6" data-value="814">814</td><td class="pvtVal row59 col7 last" data-value="1,120">1,120</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 8</div></th><td class="pvtVal row60 col0" data-value="1,529">1,529</td><td class="pvtVal row60 col1 lastcol" data-value="1,691">1,691</td><td class="pvtVal row60 col2" data-value="239">239</td><td class="pvtVal row60 col3 lastcol" data-value="175">175</td><td class="pvtVal row60 col4" data-value="540">540</td><td class="pvtVal row60 col5 lastcol" data-value="399">399</td><td class="pvtVal row60 col6" data-value="750">750</td><td class="pvtVal row60 col7 last" data-value="1,117">1,117</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 9</div></th><td class="pvtVal row61 col0" data-value="1,462">1,462</td><td class="pvtVal row61 col1 lastcol" data-value="1,603">1,603</td><td class="pvtVal row61 col2" data-value="219">219</td><td class="pvtVal row61 col3 lastcol" data-value="181">181</td><td class="pvtVal row61 col4" data-value="500">500</td><td class="pvtVal row61 col5 lastcol" data-value="377">377</td><td class="pvtVal row61 col6" data-value="743">743</td><td class="pvtVal row61 col7 last" data-value="1,045">1,045</td></tr><tr class=" last"><th class="pvtRowLabel notopics last" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 10</div></th><td class="pvtVal row62 col0" data-value="1,582">1,582</td><td class="pvtVal row62 col1 lastcol" data-value="1,590">1,590</td><td class="pvtVal row62 col2" data-value="253">253</td><td class="pvtVal row62 col3 lastcol" data-value="176">176</td><td class="pvtVal row62 col4" data-value="570">570</td><td class="pvtVal row62 col5 lastcol" data-value="368">368</td><td class="pvtVal row62 col6" data-value="759">759</td><td class="pvtVal row62 col7 last" data-value="1,046">1,046</td></tr></tbody></table><div class="source">Source: CBS</div></body></html><div style="height: 50px;"></div><div style="font-size: 8pt;margin-left: 12px;border-top: 1px solid grey;"><h2 style="margin-top: 1.5em;">Table explanation</h2><div><pre>CONTENTS
+
+1. General information
+2. Definitions and explanation of symbols
+3. Links to relevant tables and articles
+4. Sources and methods
+5. Further information
+
+1. GENERAL INFORMATION
+
+This table contains provisional data on the number of deaths among the population of the Netherlands.
+
+The data can be broken down by gender and age group.
+
+Data available from: 1995
+
+Status of the figures:
+The figures for the years 1995 to 2020 inclusive are final.
+The figures for 2021 and 2022 are provisional. These figures may change with each renewal of the publication due to the fact that death registrations received later are still included. As this method is different from the method used for monthly mortality figures, minor discrepancies may occur.
+
+Changes as of 21 January 2022:
+Provisional figures of week 1 and 2 of 2022 have been added.
+The provisional figures of week 2 of 2022 are estimated. This estimate is based on the number of death reports that CBS has received so far for week 2.
+
+When will new figures be published?
+Every week, provisional figures over the previous week are included in this publication.
+
+2. DEFINITIONS AND EXPLANATION OF SYMBOLS
+
+Definitions:
+
+Age
+The number of whole years that have passed between someone’s date of birth and 31 December of the year of death, calculated as the reference year minus the year of birth.
+
+Deceased person
+Person confirmed dead by an authorised medical practitioner by the signing of a death certificate.
+
+Population
+The total number of people residing in a given area.
+Only persons recorded in the population register of a Dutch municipality are included in the population. In principle, every person who lives in the Netherlands for an indefinite period is included in the population register of the municipality. Persons belonging to the population of the Netherlands for whom no permanent place of residence can be designated, are included in the population register of the municipality of The Hague. The population registers do not include the persons living in the Netherlands to whom exemption rules apply with regard to inclusion in the population registers (for example diplomats and NATO military personnel) and persons without legal residence in the Netherlands.
+
+Explanation of symbols:
+
+Empty cell	: figure not applicable
+. 		: figure is unknown, insufficiently reliable or confidential
+*		: provisional figure 
+**		: revised provisional figure
+
+3. LINKS TO RELEVANT TABLES AND ARTICLES
+
+Relevant table: 
+<a href="https://opendata.cbs.nl/statline/#/CBS/en/dataset/37979eng">Mortality; key figures</a>
+
+Relevant articles:
+News items <a href="https://www.cbs.nl/en-gb/series/mortality-per-week">Mortality per week</a> 
+
+More information can be found in the theme <a href="https://www.cbs.nl/en-gb/society/population">Population</a>. 
+
+4. SOURCES AND METHODS
+
+Break in series of late reports 
+Up to 2010, reports of events in a certain year received at Statistics Netherlands after 15 February of the following year - the so-called late reports - were ignored. As a result of an improvement in the production method, late reports received in the year of publication will be included in the figures for the year of publication.
+
+Population
+The observations are based on information received from the municipal population registers.
+
+Accuracy and reliability 
+In a limited number of cases the data received by Statistics Netherlands are incomplete. In such cases the missing data are estimated.
+
+More information can be found in <a href="https://www.cbs.nl/nl-nl/onze-diensten/methoden/onderzoeksomschrijvingen/korte-onderzoeksbeschrijvingen/bevolkingsstatistiek">Bevolkingsstatistiek</a>. (Dutch only).
+
+Data from 2014 in this table are derived from <a href="https://www.cbs.nl/nl-nl/onze-diensten/methoden/onderzoeksomschrijvingen/korte-onderzoeksbeschrijvingen/stelsel-van-sociaal-statistische-bestanden--ssb--">Stelsel van Sociaal-statistische Bestanden (SSB)</a>. (Dutch only).
+
+5. FURTHER INFORMATION
+
+<a href="https://www.cbs.nl/en-gb/about-us/contact/infoservice">Infoservice</a>
+
+Copyright (c) Statistics Netherlands, The Hague/Heerlen
+Reproduction is permitted, provided Statistics Netherlands is quoted as the source. </pre></div></div><div style="font-size: 8pt;margin-left: 12px;border-top: 1px solid grey;"><h2 style="margin-top: 1.5em;">Topics/classifications</h2><ul><li><h5 class="onderwerp">Topics</h5><ul><li><h5 class="onderwerp">Deaths</h5><pre style="background-color: inherit; padding: 0; border: none;">Number of deceased persons who were counted among the population of the Netherlands.
+
+Deceased person 
+Person confirmed dead by an authorised medical practitioner by the signing of a death certificate.
+
+Population
+The total number of people residing in a given area.
+Only persons recorded in the population register of a Dutch municipality are included in the population. In principle, every person who lives in the Netherlands for an indefinite period is included in the population register of the municipality. Persons belonging to the population of the Netherlands for whom no permanent place of residence can be designated, are included in the population register of the municipality of The Hague. The population registers do not include the persons living in the Netherlands to whom exemption rules apply with regard to inclusion in the population registers (for example diplomats and NATO military personnel) and persons without legal residence in the Netherlands.
+</pre><ul></ul></li></ul></li></ul><ul><li><h5 class="onderwerp">Sex</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul><li><h5 class="onderwerp">Male</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">Female</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li></ul></li><li><h5 class="onderwerp">Age, 31 December</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul><li><h5 class="onderwerp">Total</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">0 to 64 years</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">65 to 79 years</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">80 years or older</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li></ul></li><li><h5 class="onderwerp">Periods</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul><li><h5 class="onderwerp">2018 week 1</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 2</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 3</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 4</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 5</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 6</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 7</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 8</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 9</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 10</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 11</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 12</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 13</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 14</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 15</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 16</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 17</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 18</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 19</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 20</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 21</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 22</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 23</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 24</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 25</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 26</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 27</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 28</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 29</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 30</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 31</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 32</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 33</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 34</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 35</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 36</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 37</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 38</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 39</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 40</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 41</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 42</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 43</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 44</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 45</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 46</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 47</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 48</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 49</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 50</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 51</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 52</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2018 week 53 (1 day)</h5><pre style="background-color: inherit; padding: 0; border: none;">Concerns 1 day of 2018 that falls in week 1 of 2019.</pre><ul></ul></li><li><h5 class="onderwerp">2019 week 1 (6 days)</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 2</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 3</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 4</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 5</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 6</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 7</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 8</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 9</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 10</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li></ul></li></ul></div>

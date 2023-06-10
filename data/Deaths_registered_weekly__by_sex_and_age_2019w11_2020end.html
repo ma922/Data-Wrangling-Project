@@ -1,0 +1,586 @@
+<html><head><meta charset="utf-8" /><title>Tabel export: Deaths registered weekly, by sex and age</title></head><body><div class="subtitle-container" ng-attr-data-printprefixtitle="{{ 'dictionary.Title' | translate }}" data-printprefixtitle="Title">
+            <h1 class="title ng-binding">Deaths registered weekly, by sex and age</h1>
+            <div class="modifiedDate-container">
+                <h5 class="modifiedDate ng-binding">Changed on: 21 January 2022</h5>
+            </div>
+        </div><style type="text/css">h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 { font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; font-weight: 500; line-height: 1.1; } a:hover, a:focus { color: #2A6496; text-decoration: underline; } a:active, a:hover { outline: 0px none; } a { color: #428BCA; text-decoration: none; } /*@-ms-viewport {width:auto!important} http://windowssecrets.com/forums/showthread.php/168281-Disappearing-scrollbar-in-IE11 */
+/*  TODO: Download.less maken voor styling in downloads, onderstaande h1 daarheen verplaatsen */
+.title {
+  font-family: "Akko Regular W01", Helvetica, Arial, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #163a72;
+}
+#pivotTableOutput {
+  margin: 150px 20px 20px 20px;
+}
+#pivotTableInfo {
+  display: none;
+}
+#pivotTableInfo.bordered {
+  display: block;
+  background-color: #d1ecf1;
+  border: 1px solid #0c5460;
+  margin-top: 10px;
+  color: #0c5460;
+}
+#pivotTableInfo.bordered .btn-small {
+  color: #0c5460;
+  border: none;
+  margin: 10px 10px 0 0;
+  cursor: pointer;
+}
+#pivotTableInfo #pivotInfoText {
+  font-family: "Akko Regular W01", Helvetica, Arial, sans-serif;
+  padding-left: 10px;
+}
+.pivotTableInfo {
+  display: none;
+}
+.pivotTableInfo.bordered {
+  display: block;
+  background-color: #d1ecf1;
+  border: 1px solid #0c5460;
+  margin-top: 10px;
+  color: #0c5460;
+}
+.pivotTableInfo.bordered .btn-small {
+  color: #0c5460;
+  border: none;
+  margin: 10px 10px 0 0;
+  cursor: pointer;
+}
+.pivotTableInfo .pivotInfoText {
+  font-family: "Akko Regular W01", Helvetica, Arial, sans-serif;
+  padding-left: 10px;
+}
+.pivotTableWarning {
+  display: none;
+}
+.pivotTableWarning.bordered {
+  display: block;
+  background-color: #fff3cd;
+  border: 1px solid #856404;
+  margin: 10px 0;
+  color: #856404;
+}
+.pivotTableWarning.bordered .btn-small {
+  color: #856404;
+  border: none;
+  margin: 10px 10px 0 0;
+  cursor: pointer;
+}
+.pivotTableWarning h3 {
+  margin-top: 15px;
+  color: #856404;
+}
+.pivotTableWarning .pivotWarningText {
+  font-family: "Akko Regular W01", Helvetica, Arial, sans-serif;
+  padding-left: 10px;
+}
+#pivotTablePanel {
+  border: 0;
+  margin-bottom: 0;
+}
+#pivotTablePanel .tooltip-arrow {
+  border-top-color: #163a72;
+  border-bottom-color: #163a72;
+}
+#pivotTablePanel .tooltip-inner {
+  white-space: normal;
+  background-color: #163a72;
+  padding: 8px;
+  color: #fff;
+  font-family: "Akko Regular W01", Helvetica, Arial, sans-serif;
+  font-size: 100%;
+  text-align: left;
+}
+div .maincontent #pivotTableOutput {
+  margin: -10px 3px 0 0;
+  padding-top: 10px;
+}
+.pvtUi {
+  color: #000;
+}
+.pvtAttr {
+  font-weight: bold;
+}
+table.pvtTable {
+  font-size: 12px;
+  text-align: left;
+  border-collapse: collapse;
+}
+table.pvtTable thead th {
+  border-bottom: 1px solid #ececec;
+}
+table.pvtTable thead th.pvtContainer {
+  border-bottom: none;
+}
+table.pvtTable th.lastcol {
+  padding-right: 15px;
+}
+table.pvtTable th.pvtUpperLeftCorner {
+  border: 1px solid #fff;
+}
+table.pvtTable td.lastcol {
+  padding-right: 15px;
+}
+table.pvtTable tbody tr.first th {
+  border-top: 1px solid #ececec;
+  margin-top: 5px;
+}
+table.pvtTable tr th {
+  background-color: #fff;
+  font-size: 12px;
+  padding-left: 5px;
+  padding-right: 5px;
+  font-weight: normal;
+}
+table.pvtTable tr th.pvtColLabelUnit {
+  background-color: #fff;
+  font-weight: bold;
+  vertical-align: bottom;
+  border-bottom: none;
+}
+table.pvtTable tr th.spacer {
+  background-color: inherit;
+  border-bottom: 1px solid #777777;
+}
+table.pvtTable tr td {
+  color: #000;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: bottom;
+  text-align: right;
+  white-space: nowrap;
+}
+table.pvtTable tr.last td,
+table.pvtTable tr.last th {
+  border-bottom: 1px solid #ececec;
+}
+table.pvtTable tr.first .pvtRowLabel.topics {
+  border-top: 1px solid #ececec;
+}
+table.pvtTable .pvtContainer div.topic {
+  margin-left: 0;
+  font-weight: normal;
+}
+table.pvtTable .pvtContainer div.topicgroup {
+  margin-left: 0;
+  font-weight: normal;
+}
+table.pvtTable .pvtContainer > div .topic {
+  font-weight: normal;
+}
+table.pvtTable .pvtContainer .pvtAttrSingle > div .topic {
+  margin-left: 0;
+  margin-top: 0;
+}
+table.pvtTable .pvtContainer .pvtAttrSingle > div .topicgroup {
+  margin-left: 0;
+  margin-top: 0;
+  font-weight: bold;
+}
+table.pvtTable .pvtContainer .pvtAttrSingle > div .topicgroup > div.topic {
+  margin-left: 0;
+  margin-top: 0;
+}
+table.pvtTable .pvtContainer .pvtAttrSingle > div .topicgroup > div.topicgroup {
+  margin-left: 0;
+  margin-top: 0;
+}
+table.pvtTable .pvtRowLabel {
+  background-color: #ececec;
+  text-align: left;
+  vertical-align: top;
+  white-space: nowrap;
+}
+table.pvtTable .pvtRowLabel div.topic {
+  margin-left: 12px;
+  font-weight: normal;
+}
+table.pvtTable .pvtRowLabel div.topicgroup {
+  margin-left: 12px;
+  font-weight: normal;
+}
+table.pvtTable .pvtRowLabel > div.topic {
+  margin-left: 0;
+  margin-top: 0;
+  font-weight: normal;
+  padding-top: 5px;
+}
+table.pvtTable .pvtRowLabel > div.topicgroup {
+  margin-left: 0;
+  margin-top: 0;
+  font-weight: bold;
+}
+table.pvtTable .pvtRowLabel > div.topicgroup > div.topic {
+  margin-left: 0;
+  margin-top: 0;
+}
+table.pvtTable .pvtRowLabel > div.topicgroup > div.topicgroup {
+  margin-left: 0;
+  margin-top: 0;
+}
+table.pvtTable .pvtRowLabel.topics {
+  border-bottom-style: none;
+  border-top-style: none;
+}
+table.pvtTable .pvtRowLabel.notopics {
+  padding-top: 5px;
+}
+table.pvtTable .pvtRowLabel.last {
+  border-bottom: 1px solid #ececec;
+}
+table.pvtTable .pvtRowLabel .topicgroup.start {
+  padding-top: 5px;
+}
+table.pvtTable .pvtColLabel {
+  border-bottom: 1px solid #ececec;
+  text-align: left;
+  vertical-align: bottom;
+}
+table.pvtTable .pvtColLabel div.topic {
+  margin-left: 12px;
+  font-weight: normal;
+}
+table.pvtTable .pvtColLabel div.topicgroup {
+  margin-left: 12px;
+  font-weight: normal;
+}
+table.pvtTable .pvtColLabel > div.topic {
+  margin-left: 0;
+  margin-top: 0;
+  font-weight: normal;
+}
+table.pvtTable .pvtColLabel > div.topicgroup {
+  margin-left: 0;
+  margin-top: 0;
+  font-weight: bold;
+}
+table.pvtTable .pvtColLabel > div.topicgroup > div.topic {
+  margin-left: 0;
+  margin-top: 0;
+}
+table.pvtTable .pvtColLabel > div.topicgroup > div.topicgroup {
+  margin-left: 0;
+  margin-top: 0;
+}
+table.pvtTable .pvtColLabel.toprow {
+  font-weight: bold;
+  border-right: 5px solid #fff;
+  padding-left: 1px;
+}
+table.pvtTable .pvtColLabel.toprow > div.topic {
+  font-weight: bold;
+  border-right: 5px solid #fff;
+  padding-left: 1px;
+}
+table.pvtTable .pvtColLabel.toprow:nth-child(2) {
+  padding-left: 5px;
+}
+table.pvtTable .pvtColLabel.bottomrow {
+  text-align: right;
+}
+.pvtAggregator {
+  margin-bottom: 5px ;
+}
+.pvtRendererAxisContainer {
+  border: 0 none;
+  margin: 0;
+  padding: 0;
+}
+.pvtRendererAxisContainer li {
+  display: inline-block;
+  list-style-type: none;
+  background-color: #fff;
+  padding: 0;
+  border: 2px solid #ececec;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+.pvtRendererAxisContainer li > span {
+  display: table-cell;
+  vertical-align: top;
+}
+.pvtRendererAxisContainer li .pvtAttr {
+  text-align: right;
+  -webkit-user-select: none;
+  /* Chrome all / Safari all */
+  -moz-user-select: none;
+  /* Firefox all */
+  -ms-user-select: none;
+  /* IE 10+ */
+  user-select: none;
+  background-color: #ececec;
+  padding: 4px;
+  white-space: nowrap;
+  cursor: move;
+  margin: 0;
+}
+.pvtRendererAxisContainer li .ui-draggable-dragging {
+  max-height: 30px;
+  border: 2px solid #0581a2;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+.pvtRendererAxisContainer li .pvtAttrSingle {
+  padding-left: 4px;
+  padding-top: 4px;
+  -webkit-user-select: none;
+  /* Chrome all / Safari all */
+  -moz-user-select: none;
+  /* Firefox all */
+  -ms-user-select: none;
+  /* IE 10+ */
+  user-select: none;
+  white-space: nowrap;
+  cursor: default;
+}
+.pvtRendererAxisContainer li .pvtAttrEditHandle {
+  background-color: #fff;
+  white-space: nowrap;
+  vertical-align: middle;
+  font-family: FontAwesome;
+  font-weight: normal;
+  font-size: 10pt;
+  cursor: pointer;
+  padding: 0 4px 0 4px;
+}
+.pvtRendererAxisContainer li.dragging {
+  opacity: 0.5;
+}
+.pvtRendererAxisContainer li.ignore {
+  min-width: 60px;
+  border-color: #fff;
+  cursor: default;
+}
+.pvtRendererAxisContainer li.ui-state-highlight {
+  background-color: transparent;
+  -webkit-border-radius: 5px;
+  padding: 6px 3px 3px 3px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  border: 2px dotted #0581a2;
+  min-width: 60px;
+}
+.pvtRendererAxisContainer li.drop-hover {
+  background-color: #fff;
+  border: 2px solid #0581a2;
+  padding: 6px 3px 3px 3px;
+  min-width: 60px;
+}
+.pvtRendererAxisContainer li.sortable-chosen span .pvtAttrSingle {
+  display: none;
+}
+.pvtRendererAxisContainer li.pvtPlaceholder {
+  -webkit-border-radius: 5px;
+  padding: 3px 3px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  border: 1px dashed #000;
+}
+.pvtRendererAxisContainer.vals li.ignore {
+  padding: 0;
+}
+.pvtHorizList {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-wrap: nowrap;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+}
+.pvtHorizList li {
+  margin-right: 4px;
+  margin-bottom: 5px;
+}
+.pvtContainer div.bottomborder {
+  margin-top: 6px;
+  border-bottom: 1px solid #ececec;
+}
+.pvtVertList {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-flex-wrap: nowrap;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+}
+.pvtVertList li {
+  margin-top: 5px;
+}
+.pvtVals {
+  border: 0 none;
+  margin: 0;
+  padding: 0;
+}
+.pvtAxisContainer li.ignore {
+  min-width: 60px;
+  border-color: #fff;
+  cursor: default;
+}
+.pvtAxisContainer li.pvtPlaceholder {
+  -webkit-border-radius: 5px;
+  padding: 3px 3px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  border: 1px dashed #000;
+}
+li.sortable-chosen span.pvtAttrEditHandle {
+  display: none;
+}
+td.pvtRendererAxisContainer.pvtRows,
+td.pvtAxisContainer.pvtRows {
+  vertical-align: top;
+}
+.pvtTriangle {
+  cursor: pointer;
+  color: grey;
+}
+.pvtFilteredAttribute {
+  font-style: italic;
+}
+.pvtFilterBox {
+  z-index: 100;
+  width: 280px;
+  border: 1px solid #777777;
+  background-color: #fff;
+  position: absolute;
+  padding: 20px;
+  text-align: center;
+}
+.pvtFilterBox h4 {
+  margin: 0;
+}
+.pvtFilterBox p {
+  margin: 1em auto;
+}
+.pvtFilterBox label {
+  font-weight: normal;
+}
+.pvtFilterBox input[type='checkbox'] {
+  margin-right: 5px;
+}
+.pvtCheckContainer {
+  text-align: left;
+  overflow: scroll;
+  max-height: 200px;
+}
+.pvtCheckContainer p {
+  margin: 5px;
+}
+.pvtRendererArea {
+  padding: 5px;
+}
+.pvtRenderer {
+  display: none;
+}
+#bron {
+  padding: 4px 0 0 5px;
+}
+@media (max-width: 767px) {
+  #bron {
+    padding-left: 2px;
+  }
+  table.pvtTable {
+    margin-left: 12px;
+  }
+  div.maincontent #pivotTableOutput {
+    margin: -10px 0 0 -15px;
+  }
+}
+body { font-family: Arial, sans-serif; } .subtitle { padding: 12px 20px 12px 32px; color: #163a72; font-size: 16px; width: auto; margin: 0; } @media(min-width: 992px) { .subtitle { border-radius: 0 8px 8px 0; width: auto; display: inline-block; }} span.pvtAttrEditHandle, .pvtRendererAxisContainer li, .pvtAxisContainer li { cursor: inherit; } .source { padding: 12px ; font-size: 8pt; font-family: Arial, sans-serif; } span.pvtAttrEditHandle { visibility: hidden; display:none; } .pvtVertList { text-align:left;} th { text-align: left;} .modifiedDate { padding: 0px 20px 0px 32px; background-color: white; color: #163a72; font-size: 12px; border-left: none; border-right: none; width: auto; display: block; margin: 0; height: 26px; line-height: 26px; } @media(max-width: 767px) { .modifiedDate { padding: 0px 20px 0px 32px; background-color: white; color: #163a72; font-size: 12px; border: 1px solid #ececec; border-left: none; border-right: none; margin: 0; width: auto; display: block; line-height: 26px; }} @media(min-width: 992px) { .modifiedDate { padding: 0px 20px 0px 32px; background-color: white; color: #163a72; font-size: 12px; border: 1px solid #ececec; border-left: none; border-right: none; width: auto; display: inline-block; margin: 0; line-height: 26px; }} .modifiedDate-container { margin-bottom: 30px; margin-top: -1px; } .alert-info { color: #3a87ad; background-color: #d9edf7; border-color: #bce8f1; }.alert { padding: 15px; margin-bottom: 20px; border: 1px solid transparent; border-radius: 4px; font-size: 12px; }h5.onderwerp { font-size: 8pt; font-style: italic; font-weight: normal; } pre { font-family: inherit; font-weight: normal; word-break: inherit; word-wrap: inherit; }</style><table class="pvtTable" data-numrows="96" data-numcols="8"><thead><tr><th class="pvtContainer" rowspan="1" colspan="10"><ul class="pvtRendererAxisContainer pvtVertList vals clearfix"><li class="axis_1"><span class="pvtAttr ui-draggable ui-draggable-handle" style="width: 34.525px;">Topic</span><span class="pvtAttrSingle" style="width: 40.2px;"><div class="topic" data-key="Deaths_1" title="" data-placement="auto" data-original-title="Number of deceased persons who were counted among the population of the Netherlands.<br /><br />Deceased person <br />Person confirmed dead by an authorised medical practitioner by the signing of a death certificate.<br /><br />Population<br />The total number of people residing in a given area.<br />Only persons recorded in the population register of a Dutch municipality are included in the population. In principle, every person who lives in the Netherlands for an indefinite period...<br /><br /><i>Click i button for full info</i>">Deaths</div></span><span class="pvtAttrEditHandle">&nbsp;</span></li><li class="ignore"></li></ul></th></tr><tr><th class="spacer" rowspan="1" colspan="10"></th></tr><tr><th class="pvtUpperLeftCorner" colspan="2" rowspan="1"></th><th class="pvtContainer" colspan="8" rowspan="1"><ul class="pvtRendererAxisContainer pvtHorizList cols clearfix"><li class="axis_0"><span class="pvtAttr ui-draggable ui-draggable-handle">Age, 31 December</span><span class="pvtAttrEditHandle">&nbsp;</span></li><li class="axis_1"><span class="pvtAttr ui-draggable ui-draggable-handle">Sex</span><span class="pvtAttrEditHandle">&nbsp;</span></li><li class="ignore"></li></ul><div class="bottomborder"></div></th></tr><tr><th class="pvtContainer left" colspan="2" rowspan="3"><ul class="pvtRendererAxisContainer pvtVertList rows clearfix"><li class="axis_2"><span class="pvtAttr ui-draggable ui-draggable-handle" style="width: 46.775px;">Periods</span><span class="pvtAttrEditHandle">&nbsp;</span></li><li class="ignore"></li></ul></th><th class="pvtColLabel toprow" colspan="2"><div data-placement="auto" data-original-title="" title="">Total</div></th><th class="pvtColLabel toprow" colspan="2"><div data-placement="auto" data-original-title="" title="">0 to 64 years</div></th><th class="pvtColLabel toprow" colspan="2"><div data-placement="auto" data-original-title="" title="">65 to 79 years</div></th><th class="pvtColLabel toprow lastcol" colspan="2"><div data-placement="auto" data-original-title="" title="">80 years or older</div></th></tr><tr><th class="pvtColLabel bottomrow" colspan="1"><div data-placement="auto" data-original-title="" title="">Male</div></th><th class="pvtColLabel bottomrow lastcol" colspan="1"><div data-placement="auto" data-original-title="" title="">Female</div></th><th class="pvtColLabel bottomrow" colspan="1"><div data-placement="auto" data-original-title="" title="">Male</div></th><th class="pvtColLabel bottomrow lastcol" colspan="1"><div data-placement="auto" data-original-title="" title="">Female</div></th><th class="pvtColLabel bottomrow" colspan="1"><div data-placement="auto" data-original-title="" title="">Male</div></th><th class="pvtColLabel bottomrow lastcol" colspan="1"><div data-placement="auto" data-original-title="" title="">Female</div></th><th class="pvtColLabel bottomrow" colspan="1"><div data-placement="auto" data-original-title="" title="">Male</div></th><th class="pvtColLabel bottomrow" colspan="1"><div data-placement="auto" data-original-title="" title="">Female</div></th></tr><tr><th class="pvtColLabelUnit" colspan="8">aantal</th></tr></thead><tbody><tr class="first"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 11</div></th><td class="pvtVal row0 col0" data-value="1,582">1,582</td><td class="pvtVal row0 col1 lastcol" data-value="1,643">1,643</td><td class="pvtVal row0 col2" data-value="216">216</td><td class="pvtVal row0 col3 lastcol" data-value="198">198</td><td class="pvtVal row0 col4" data-value="574">574</td><td class="pvtVal row0 col5 lastcol" data-value="405">405</td><td class="pvtVal row0 col6" data-value="792">792</td><td class="pvtVal row0 col7 last" data-value="1,040">1,040</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 12</div></th><td class="pvtVal row1 col0" data-value="1,465">1,465</td><td class="pvtVal row1 col1 lastcol" data-value="1,578">1,578</td><td class="pvtVal row1 col2" data-value="238">238</td><td class="pvtVal row1 col3 lastcol" data-value="162">162</td><td class="pvtVal row1 col4" data-value="500">500</td><td class="pvtVal row1 col5 lastcol" data-value="360">360</td><td class="pvtVal row1 col6" data-value="727">727</td><td class="pvtVal row1 col7 last" data-value="1,056">1,056</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 13</div></th><td class="pvtVal row2 col0" data-value="1,508">1,508</td><td class="pvtVal row2 col1 lastcol" data-value="1,505">1,505</td><td class="pvtVal row2 col2" data-value="230">230</td><td class="pvtVal row2 col3 lastcol" data-value="166">166</td><td class="pvtVal row2 col4" data-value="543">543</td><td class="pvtVal row2 col5 lastcol" data-value="350">350</td><td class="pvtVal row2 col6" data-value="735">735</td><td class="pvtVal row2 col7 last" data-value="989">989</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 14</div></th><td class="pvtVal row3 col0" data-value="1,384">1,384</td><td class="pvtVal row3 col1 lastcol" data-value="1,514">1,514</td><td class="pvtVal row3 col2" data-value="221">221</td><td class="pvtVal row3 col3 lastcol" data-value="163">163</td><td class="pvtVal row3 col4" data-value="474">474</td><td class="pvtVal row3 col5 lastcol" data-value="373">373</td><td class="pvtVal row3 col6" data-value="689">689</td><td class="pvtVal row3 col7 last" data-value="978">978</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 15</div></th><td class="pvtVal row4 col0" data-value="1,472">1,472</td><td class="pvtVal row4 col1 lastcol" data-value="1,430">1,430</td><td class="pvtVal row4 col2" data-value="263">263</td><td class="pvtVal row4 col3 lastcol" data-value="140">140</td><td class="pvtVal row4 col4" data-value="507">507</td><td class="pvtVal row4 col5 lastcol" data-value="382">382</td><td class="pvtVal row4 col6" data-value="702">702</td><td class="pvtVal row4 col7 last" data-value="908">908</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 16</div></th><td class="pvtVal row5 col0" data-value="1,475">1,475</td><td class="pvtVal row5 col1 lastcol" data-value="1,561">1,561</td><td class="pvtVal row5 col2" data-value="239">239</td><td class="pvtVal row5 col3 lastcol" data-value="186">186</td><td class="pvtVal row5 col4" data-value="521">521</td><td class="pvtVal row5 col5 lastcol" data-value="378">378</td><td class="pvtVal row5 col6" data-value="715">715</td><td class="pvtVal row5 col7 last" data-value="997">997</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 17</div></th><td class="pvtVal row6 col0" data-value="1,417">1,417</td><td class="pvtVal row6 col1 lastcol" data-value="1,539">1,539</td><td class="pvtVal row6 col2" data-value="216">216</td><td class="pvtVal row6 col3 lastcol" data-value="151">151</td><td class="pvtVal row6 col4" data-value="472">472</td><td class="pvtVal row6 col5 lastcol" data-value="387">387</td><td class="pvtVal row6 col6" data-value="729">729</td><td class="pvtVal row6 col7 last" data-value="1,001">1,001</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 18</div></th><td class="pvtVal row7 col0" data-value="1,363">1,363</td><td class="pvtVal row7 col1 lastcol" data-value="1,443">1,443</td><td class="pvtVal row7 col2" data-value="222">222</td><td class="pvtVal row7 col3 lastcol" data-value="155">155</td><td class="pvtVal row7 col4" data-value="477">477</td><td class="pvtVal row7 col5 lastcol" data-value="392">392</td><td class="pvtVal row7 col6" data-value="664">664</td><td class="pvtVal row7 col7 last" data-value="896">896</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 19</div></th><td class="pvtVal row8 col0" data-value="1,334">1,334</td><td class="pvtVal row8 col1 lastcol" data-value="1,438">1,438</td><td class="pvtVal row8 col2" data-value="225">225</td><td class="pvtVal row8 col3 lastcol" data-value="153">153</td><td class="pvtVal row8 col4" data-value="446">446</td><td class="pvtVal row8 col5 lastcol" data-value="375">375</td><td class="pvtVal row8 col6" data-value="663">663</td><td class="pvtVal row8 col7 last" data-value="910">910</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 20</div></th><td class="pvtVal row9 col0" data-value="1,366">1,366</td><td class="pvtVal row9 col1 lastcol" data-value="1,455">1,455</td><td class="pvtVal row9 col2" data-value="224">224</td><td class="pvtVal row9 col3 lastcol" data-value="163">163</td><td class="pvtVal row9 col4" data-value="466">466</td><td class="pvtVal row9 col5 lastcol" data-value="345">345</td><td class="pvtVal row9 col6" data-value="676">676</td><td class="pvtVal row9 col7 last" data-value="947">947</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 21</div></th><td class="pvtVal row10 col0" data-value="1,370">1,370</td><td class="pvtVal row10 col1 lastcol" data-value="1,503">1,503</td><td class="pvtVal row10 col2" data-value="240">240</td><td class="pvtVal row10 col3 lastcol" data-value="164">164</td><td class="pvtVal row10 col4" data-value="453">453</td><td class="pvtVal row10 col5 lastcol" data-value="357">357</td><td class="pvtVal row10 col6" data-value="677">677</td><td class="pvtVal row10 col7 last" data-value="982">982</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 22</div></th><td class="pvtVal row11 col0" data-value="1,356">1,356</td><td class="pvtVal row11 col1 lastcol" data-value="1,374">1,374</td><td class="pvtVal row11 col2" data-value="238">238</td><td class="pvtVal row11 col3 lastcol" data-value="149">149</td><td class="pvtVal row11 col4" data-value="508">508</td><td class="pvtVal row11 col5 lastcol" data-value="338">338</td><td class="pvtVal row11 col6" data-value="610">610</td><td class="pvtVal row11 col7 last" data-value="887">887</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 23</div></th><td class="pvtVal row12 col0" data-value="1,327">1,327</td><td class="pvtVal row12 col1 lastcol" data-value="1,407">1,407</td><td class="pvtVal row12 col2" data-value="229">229</td><td class="pvtVal row12 col3 lastcol" data-value="188">188</td><td class="pvtVal row12 col4" data-value="441">441</td><td class="pvtVal row12 col5 lastcol" data-value="364">364</td><td class="pvtVal row12 col6" data-value="657">657</td><td class="pvtVal row12 col7 last" data-value="855">855</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 24</div></th><td class="pvtVal row13 col0" data-value="1,337">1,337</td><td class="pvtVal row13 col1 lastcol" data-value="1,310">1,310</td><td class="pvtVal row13 col2" data-value="225">225</td><td class="pvtVal row13 col3 lastcol" data-value="143">143</td><td class="pvtVal row13 col4" data-value="490">490</td><td class="pvtVal row13 col5 lastcol" data-value="328">328</td><td class="pvtVal row13 col6" data-value="622">622</td><td class="pvtVal row13 col7 last" data-value="839">839</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 25</div></th><td class="pvtVal row14 col0" data-value="1,354">1,354</td><td class="pvtVal row14 col1 lastcol" data-value="1,338">1,338</td><td class="pvtVal row14 col2" data-value="212">212</td><td class="pvtVal row14 col3 lastcol" data-value="153">153</td><td class="pvtVal row14 col4" data-value="516">516</td><td class="pvtVal row14 col5 lastcol" data-value="349">349</td><td class="pvtVal row14 col6" data-value="626">626</td><td class="pvtVal row14 col7 last" data-value="836">836</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 26</div></th><td class="pvtVal row15 col0" data-value="1,403">1,403</td><td class="pvtVal row15 col1 lastcol" data-value="1,433">1,433</td><td class="pvtVal row15 col2" data-value="244">244</td><td class="pvtVal row15 col3 lastcol" data-value="167">167</td><td class="pvtVal row15 col4" data-value="507">507</td><td class="pvtVal row15 col5 lastcol" data-value="350">350</td><td class="pvtVal row15 col6" data-value="652">652</td><td class="pvtVal row15 col7 last" data-value="916">916</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 27</div></th><td class="pvtVal row16 col0" data-value="1,356">1,356</td><td class="pvtVal row16 col1 lastcol" data-value="1,369">1,369</td><td class="pvtVal row16 col2" data-value="226">226</td><td class="pvtVal row16 col3 lastcol" data-value="159">159</td><td class="pvtVal row16 col4" data-value="493">493</td><td class="pvtVal row16 col5 lastcol" data-value="373">373</td><td class="pvtVal row16 col6" data-value="637">637</td><td class="pvtVal row16 col7 last" data-value="837">837</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 28</div></th><td class="pvtVal row17 col0" data-value="1,327">1,327</td><td class="pvtVal row17 col1 lastcol" data-value="1,434">1,434</td><td class="pvtVal row17 col2" data-value="246">246</td><td class="pvtVal row17 col3 lastcol" data-value="156">156</td><td class="pvtVal row17 col4" data-value="465">465</td><td class="pvtVal row17 col5 lastcol" data-value="376">376</td><td class="pvtVal row17 col6" data-value="616">616</td><td class="pvtVal row17 col7 last" data-value="902">902</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 29</div></th><td class="pvtVal row18 col0" data-value="1,274">1,274</td><td class="pvtVal row18 col1 lastcol" data-value="1,312">1,312</td><td class="pvtVal row18 col2" data-value="246">246</td><td class="pvtVal row18 col3 lastcol" data-value="156">156</td><td class="pvtVal row18 col4" data-value="484">484</td><td class="pvtVal row18 col5 lastcol" data-value="332">332</td><td class="pvtVal row18 col6" data-value="544">544</td><td class="pvtVal row18 col7 last" data-value="824">824</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 30</div></th><td class="pvtVal row19 col0" data-value="1,453">1,453</td><td class="pvtVal row19 col1 lastcol" data-value="1,553">1,553</td><td class="pvtVal row19 col2" data-value="237">237</td><td class="pvtVal row19 col3 lastcol" data-value="196">196</td><td class="pvtVal row19 col4" data-value="516">516</td><td class="pvtVal row19 col5 lastcol" data-value="363">363</td><td class="pvtVal row19 col6" data-value="700">700</td><td class="pvtVal row19 col7 last" data-value="994">994</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 31</div></th><td class="pvtVal row20 col0" data-value="1,348">1,348</td><td class="pvtVal row20 col1 lastcol" data-value="1,383">1,383</td><td class="pvtVal row20 col2" data-value="222">222</td><td class="pvtVal row20 col3 lastcol" data-value="157">157</td><td class="pvtVal row20 col4" data-value="508">508</td><td class="pvtVal row20 col5 lastcol" data-value="349">349</td><td class="pvtVal row20 col6" data-value="618">618</td><td class="pvtVal row20 col7 last" data-value="877">877</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 32</div></th><td class="pvtVal row21 col0" data-value="1,281">1,281</td><td class="pvtVal row21 col1 lastcol" data-value="1,348">1,348</td><td class="pvtVal row21 col2" data-value="202">202</td><td class="pvtVal row21 col3 lastcol" data-value="169">169</td><td class="pvtVal row21 col4" data-value="459">459</td><td class="pvtVal row21 col5 lastcol" data-value="324">324</td><td class="pvtVal row21 col6" data-value="620">620</td><td class="pvtVal row21 col7 last" data-value="855">855</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 33</div></th><td class="pvtVal row22 col0" data-value="1,283">1,283</td><td class="pvtVal row22 col1 lastcol" data-value="1,330">1,330</td><td class="pvtVal row22 col2" data-value="218">218</td><td class="pvtVal row22 col3 lastcol" data-value="142">142</td><td class="pvtVal row22 col4" data-value="479">479</td><td class="pvtVal row22 col5 lastcol" data-value="358">358</td><td class="pvtVal row22 col6" data-value="586">586</td><td class="pvtVal row22 col7 last" data-value="830">830</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 34</div></th><td class="pvtVal row23 col0" data-value="1,305">1,305</td><td class="pvtVal row23 col1 lastcol" data-value="1,312">1,312</td><td class="pvtVal row23 col2" data-value="203">203</td><td class="pvtVal row23 col3 lastcol" data-value="170">170</td><td class="pvtVal row23 col4" data-value="486">486</td><td class="pvtVal row23 col5 lastcol" data-value="328">328</td><td class="pvtVal row23 col6" data-value="616">616</td><td class="pvtVal row23 col7 last" data-value="814">814</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 35</div></th><td class="pvtVal row24 col0" data-value="1,330">1,330</td><td class="pvtVal row24 col1 lastcol" data-value="1,453">1,453</td><td class="pvtVal row24 col2" data-value="212">212</td><td class="pvtVal row24 col3 lastcol" data-value="171">171</td><td class="pvtVal row24 col4" data-value="510">510</td><td class="pvtVal row24 col5 lastcol" data-value="395">395</td><td class="pvtVal row24 col6" data-value="608">608</td><td class="pvtVal row24 col7 last" data-value="887">887</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 36</div></th><td class="pvtVal row25 col0" data-value="1,224">1,224</td><td class="pvtVal row25 col1 lastcol" data-value="1,329">1,329</td><td class="pvtVal row25 col2" data-value="213">213</td><td class="pvtVal row25 col3 lastcol" data-value="164">164</td><td class="pvtVal row25 col4" data-value="448">448</td><td class="pvtVal row25 col5 lastcol" data-value="334">334</td><td class="pvtVal row25 col6" data-value="563">563</td><td class="pvtVal row25 col7 last" data-value="831">831</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 37</div></th><td class="pvtVal row26 col0" data-value="1,290">1,290</td><td class="pvtVal row26 col1 lastcol" data-value="1,352">1,352</td><td class="pvtVal row26 col2" data-value="205">205</td><td class="pvtVal row26 col3 lastcol" data-value="175">175</td><td class="pvtVal row26 col4" data-value="487">487</td><td class="pvtVal row26 col5 lastcol" data-value="360">360</td><td class="pvtVal row26 col6" data-value="598">598</td><td class="pvtVal row26 col7 last" data-value="817">817</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 38</div></th><td class="pvtVal row27 col0" data-value="1,266">1,266</td><td class="pvtVal row27 col1 lastcol" data-value="1,314">1,314</td><td class="pvtVal row27 col2" data-value="206">206</td><td class="pvtVal row27 col3 lastcol" data-value="149">149</td><td class="pvtVal row27 col4" data-value="471">471</td><td class="pvtVal row27 col5 lastcol" data-value="346">346</td><td class="pvtVal row27 col6" data-value="589">589</td><td class="pvtVal row27 col7 last" data-value="819">819</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 39</div></th><td class="pvtVal row28 col0" data-value="1,375">1,375</td><td class="pvtVal row28 col1 lastcol" data-value="1,376">1,376</td><td class="pvtVal row28 col2" data-value="235">235</td><td class="pvtVal row28 col3 lastcol" data-value="160">160</td><td class="pvtVal row28 col4" data-value="484">484</td><td class="pvtVal row28 col5 lastcol" data-value="377">377</td><td class="pvtVal row28 col6" data-value="656">656</td><td class="pvtVal row28 col7 last" data-value="839">839</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 40</div></th><td class="pvtVal row29 col0" data-value="1,370">1,370</td><td class="pvtVal row29 col1 lastcol" data-value="1,347">1,347</td><td class="pvtVal row29 col2" data-value="230">230</td><td class="pvtVal row29 col3 lastcol" data-value="179">179</td><td class="pvtVal row29 col4" data-value="493">493</td><td class="pvtVal row29 col5 lastcol" data-value="322">322</td><td class="pvtVal row29 col6" data-value="647">647</td><td class="pvtVal row29 col7 last" data-value="846">846</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 41</div></th><td class="pvtVal row30 col0" data-value="1,481">1,481</td><td class="pvtVal row30 col1 lastcol" data-value="1,431">1,431</td><td class="pvtVal row30 col2" data-value="261">261</td><td class="pvtVal row30 col3 lastcol" data-value="150">150</td><td class="pvtVal row30 col4" data-value="571">571</td><td class="pvtVal row30 col5 lastcol" data-value="374">374</td><td class="pvtVal row30 col6" data-value="649">649</td><td class="pvtVal row30 col7 last" data-value="907">907</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 42</div></th><td class="pvtVal row31 col0" data-value="1,410">1,410</td><td class="pvtVal row31 col1 lastcol" data-value="1,469">1,469</td><td class="pvtVal row31 col2" data-value="223">223</td><td class="pvtVal row31 col3 lastcol" data-value="160">160</td><td class="pvtVal row31 col4" data-value="524">524</td><td class="pvtVal row31 col5 lastcol" data-value="388">388</td><td class="pvtVal row31 col6" data-value="663">663</td><td class="pvtVal row31 col7 last" data-value="921">921</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 43</div></th><td class="pvtVal row32 col0" data-value="1,436">1,436</td><td class="pvtVal row32 col1 lastcol" data-value="1,431">1,431</td><td class="pvtVal row32 col2" data-value="233">233</td><td class="pvtVal row32 col3 lastcol" data-value="169">169</td><td class="pvtVal row32 col4" data-value="551">551</td><td class="pvtVal row32 col5 lastcol" data-value="384">384</td><td class="pvtVal row32 col6" data-value="652">652</td><td class="pvtVal row32 col7 last" data-value="878">878</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 44</div></th><td class="pvtVal row33 col0" data-value="1,413">1,413</td><td class="pvtVal row33 col1 lastcol" data-value="1,443">1,443</td><td class="pvtVal row33 col2" data-value="217">217</td><td class="pvtVal row33 col3 lastcol" data-value="177">177</td><td class="pvtVal row33 col4" data-value="500">500</td><td class="pvtVal row33 col5 lastcol" data-value="384">384</td><td class="pvtVal row33 col6" data-value="696">696</td><td class="pvtVal row33 col7 last" data-value="882">882</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 45</div></th><td class="pvtVal row34 col0" data-value="1,517">1,517</td><td class="pvtVal row34 col1 lastcol" data-value="1,498">1,498</td><td class="pvtVal row34 col2" data-value="271">271</td><td class="pvtVal row34 col3 lastcol" data-value="196">196</td><td class="pvtVal row34 col4" data-value="500">500</td><td class="pvtVal row34 col5 lastcol" data-value="352">352</td><td class="pvtVal row34 col6" data-value="746">746</td><td class="pvtVal row34 col7 last" data-value="950">950</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 46</div></th><td class="pvtVal row35 col0" data-value="1,511">1,511</td><td class="pvtVal row35 col1 lastcol" data-value="1,549">1,549</td><td class="pvtVal row35 col2" data-value="262">262</td><td class="pvtVal row35 col3 lastcol" data-value="196">196</td><td class="pvtVal row35 col4" data-value="518">518</td><td class="pvtVal row35 col5 lastcol" data-value="404">404</td><td class="pvtVal row35 col6" data-value="731">731</td><td class="pvtVal row35 col7 last" data-value="949">949</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 47</div></th><td class="pvtVal row36 col0" data-value="1,428">1,428</td><td class="pvtVal row36 col1 lastcol" data-value="1,595">1,595</td><td class="pvtVal row36 col2" data-value="222">222</td><td class="pvtVal row36 col3 lastcol" data-value="167">167</td><td class="pvtVal row36 col4" data-value="522">522</td><td class="pvtVal row36 col5 lastcol" data-value="403">403</td><td class="pvtVal row36 col6" data-value="684">684</td><td class="pvtVal row36 col7 last" data-value="1,025">1,025</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 48</div></th><td class="pvtVal row37 col0" data-value="1,509">1,509</td><td class="pvtVal row37 col1 lastcol" data-value="1,536">1,536</td><td class="pvtVal row37 col2" data-value="229">229</td><td class="pvtVal row37 col3 lastcol" data-value="195">195</td><td class="pvtVal row37 col4" data-value="569">569</td><td class="pvtVal row37 col5 lastcol" data-value="375">375</td><td class="pvtVal row37 col6" data-value="711">711</td><td class="pvtVal row37 col7 last" data-value="966">966</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 49</div></th><td class="pvtVal row38 col0" data-value="1,472">1,472</td><td class="pvtVal row38 col1 lastcol" data-value="1,546">1,546</td><td class="pvtVal row38 col2" data-value="229">229</td><td class="pvtVal row38 col3 lastcol" data-value="178">178</td><td class="pvtVal row38 col4" data-value="515">515</td><td class="pvtVal row38 col5 lastcol" data-value="403">403</td><td class="pvtVal row38 col6" data-value="728">728</td><td class="pvtVal row38 col7 last" data-value="965">965</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 50</div></th><td class="pvtVal row39 col0" data-value="1,547">1,547</td><td class="pvtVal row39 col1 lastcol" data-value="1,614">1,614</td><td class="pvtVal row39 col2" data-value="243">243</td><td class="pvtVal row39 col3 lastcol" data-value="187">187</td><td class="pvtVal row39 col4" data-value="588">588</td><td class="pvtVal row39 col5 lastcol" data-value="433">433</td><td class="pvtVal row39 col6" data-value="716">716</td><td class="pvtVal row39 col7 last" data-value="994">994</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 51</div></th><td class="pvtVal row40 col0" data-value="1,618">1,618</td><td class="pvtVal row40 col1 lastcol" data-value="1,635">1,635</td><td class="pvtVal row40 col2" data-value="263">263</td><td class="pvtVal row40 col3 lastcol" data-value="191">191</td><td class="pvtVal row40 col4" data-value="568">568</td><td class="pvtVal row40 col5 lastcol" data-value="432">432</td><td class="pvtVal row40 col6" data-value="787">787</td><td class="pvtVal row40 col7 last" data-value="1,012">1,012</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2019 week 52</div></th><td class="pvtVal row41 col0" data-value="1,471">1,471</td><td class="pvtVal row41 col1 lastcol" data-value="1,557">1,557</td><td class="pvtVal row41 col2" data-value="242">242</td><td class="pvtVal row41 col3 lastcol" data-value="168">168</td><td class="pvtVal row41 col4" data-value="537">537</td><td class="pvtVal row41 col5 lastcol" data-value="399">399</td><td class="pvtVal row41 col6" data-value="692">692</td><td class="pvtVal row41 col7 last" data-value="990">990</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div title="" data-placement="auto" data-original-title="Relates to 2 days of 2019 that fall in week 1 of 2020.">2019 week 53 (2 days)</div></th><td class="pvtVal row42 col0" data-value="412">412</td><td class="pvtVal row42 col1 lastcol" data-value="446">446</td><td class="pvtVal row42 col2" data-value="67">67</td><td class="pvtVal row42 col3 lastcol" data-value="46">46</td><td class="pvtVal row42 col4" data-value="149">149</td><td class="pvtVal row42 col5 lastcol" data-value="115">115</td><td class="pvtVal row42 col6" data-value="196">196</td><td class="pvtVal row42 col7 last" data-value="285">285</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 1 (5 days)</div></th><td class="pvtVal row43 col0" data-value="1,092">1,092</td><td class="pvtVal row43 col1 lastcol" data-value="1,153">1,153</td><td class="pvtVal row43 col2" data-value="149">149</td><td class="pvtVal row43 col3 lastcol" data-value="123">123</td><td class="pvtVal row43 col4" data-value="382">382</td><td class="pvtVal row43 col5 lastcol" data-value="250">250</td><td class="pvtVal row43 col6" data-value="561">561</td><td class="pvtVal row43 col7 last" data-value="780">780</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 2</div></th><td class="pvtVal row44 col0" data-value="1,677">1,677</td><td class="pvtVal row44 col1 lastcol" data-value="1,687">1,687</td><td class="pvtVal row44 col2" data-value="253">253</td><td class="pvtVal row44 col3 lastcol" data-value="179">179</td><td class="pvtVal row44 col4" data-value="546">546</td><td class="pvtVal row44 col5 lastcol" data-value="420">420</td><td class="pvtVal row44 col6" data-value="878">878</td><td class="pvtVal row44 col7 last" data-value="1,088">1,088</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 3</div></th><td class="pvtVal row45 col0" data-value="1,530">1,530</td><td class="pvtVal row45 col1 lastcol" data-value="1,627">1,627</td><td class="pvtVal row45 col2" data-value="249">249</td><td class="pvtVal row45 col3 lastcol" data-value="169">169</td><td class="pvtVal row45 col4" data-value="517">517</td><td class="pvtVal row45 col5 lastcol" data-value="395">395</td><td class="pvtVal row45 col6" data-value="764">764</td><td class="pvtVal row45 col7 last" data-value="1,063">1,063</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 4</div></th><td class="pvtVal row46 col0" data-value="1,470">1,470</td><td class="pvtVal row46 col1 lastcol" data-value="1,576">1,576</td><td class="pvtVal row46 col2" data-value="215">215</td><td class="pvtVal row46 col3 lastcol" data-value="139">139</td><td class="pvtVal row46 col4" data-value="537">537</td><td class="pvtVal row46 col5 lastcol" data-value="399">399</td><td class="pvtVal row46 col6" data-value="718">718</td><td class="pvtVal row46 col7 last" data-value="1,038">1,038</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 5</div></th><td class="pvtVal row47 col0" data-value="1,578">1,578</td><td class="pvtVal row47 col1 lastcol" data-value="1,586">1,586</td><td class="pvtVal row47 col2" data-value="280">280</td><td class="pvtVal row47 col3 lastcol" data-value="170">170</td><td class="pvtVal row47 col4" data-value="537">537</td><td class="pvtVal row47 col5 lastcol" data-value="386">386</td><td class="pvtVal row47 col6" data-value="761">761</td><td class="pvtVal row47 col7 last" data-value="1,030">1,030</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 6</div></th><td class="pvtVal row48 col0" data-value="1,593">1,593</td><td class="pvtVal row48 col1 lastcol" data-value="1,603">1,603</td><td class="pvtVal row48 col2" data-value="240">240</td><td class="pvtVal row48 col3 lastcol" data-value="161">161</td><td class="pvtVal row48 col4" data-value="574">574</td><td class="pvtVal row48 col5 lastcol" data-value="408">408</td><td class="pvtVal row48 col6" data-value="779">779</td><td class="pvtVal row48 col7 last" data-value="1,034">1,034</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 7</div></th><td class="pvtVal row49 col0" data-value="1,506">1,506</td><td class="pvtVal row49 col1 lastcol" data-value="1,692">1,692</td><td class="pvtVal row49 col2" data-value="223">223</td><td class="pvtVal row49 col3 lastcol" data-value="185">185</td><td class="pvtVal row49 col4" data-value="525">525</td><td class="pvtVal row49 col5 lastcol" data-value="413">413</td><td class="pvtVal row49 col6" data-value="758">758</td><td class="pvtVal row49 col7 last" data-value="1,094">1,094</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 8</div></th><td class="pvtVal row50 col0" data-value="1,485">1,485</td><td class="pvtVal row50 col1 lastcol" data-value="1,474">1,474</td><td class="pvtVal row50 col2" data-value="191">191</td><td class="pvtVal row50 col3 lastcol" data-value="149">149</td><td class="pvtVal row50 col4" data-value="536">536</td><td class="pvtVal row50 col5 lastcol" data-value="334">334</td><td class="pvtVal row50 col6" data-value="758">758</td><td class="pvtVal row50 col7 last" data-value="991">991</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 9</div></th><td class="pvtVal row51 col0" data-value="1,504">1,504</td><td class="pvtVal row51 col1 lastcol" data-value="1,594">1,594</td><td class="pvtVal row51 col2" data-value="230">230</td><td class="pvtVal row51 col3 lastcol" data-value="174">174</td><td class="pvtVal row51 col4" data-value="525">525</td><td class="pvtVal row51 col5 lastcol" data-value="386">386</td><td class="pvtVal row51 col6" data-value="749">749</td><td class="pvtVal row51 col7 last" data-value="1,034">1,034</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 10</div></th><td class="pvtVal row52 col0" data-value="1,519">1,519</td><td class="pvtVal row52 col1 lastcol" data-value="1,588">1,588</td><td class="pvtVal row52 col2" data-value="229">229</td><td class="pvtVal row52 col3 lastcol" data-value="165">165</td><td class="pvtVal row52 col4" data-value="505">505</td><td class="pvtVal row52 col5 lastcol" data-value="384">384</td><td class="pvtVal row52 col6" data-value="785">785</td><td class="pvtVal row52 col7 last" data-value="1,039">1,039</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 11</div></th><td class="pvtVal row53 col0" data-value="1,596">1,596</td><td class="pvtVal row53 col1 lastcol" data-value="1,622">1,622</td><td class="pvtVal row53 col2" data-value="250">250</td><td class="pvtVal row53 col3 lastcol" data-value="160">160</td><td class="pvtVal row53 col4" data-value="546">546</td><td class="pvtVal row53 col5 lastcol" data-value="402">402</td><td class="pvtVal row53 col6" data-value="800">800</td><td class="pvtVal row53 col7 last" data-value="1,060">1,060</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 12</div></th><td class="pvtVal row54 col0" data-value="1,872">1,872</td><td class="pvtVal row54 col1 lastcol" data-value="1,742">1,742</td><td class="pvtVal row54 col2" data-value="268">268</td><td class="pvtVal row54 col3 lastcol" data-value="180">180</td><td class="pvtVal row54 col4" data-value="674">674</td><td class="pvtVal row54 col5 lastcol" data-value="406">406</td><td class="pvtVal row54 col6" data-value="930">930</td><td class="pvtVal row54 col7 last" data-value="1,156">1,156</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 13</div></th><td class="pvtVal row55 col0" data-value="2,366">2,366</td><td class="pvtVal row55 col1 lastcol" data-value="2,092">2,092</td><td class="pvtVal row55 col2" data-value="308">308</td><td class="pvtVal row55 col3 lastcol" data-value="193">193</td><td class="pvtVal row55 col4" data-value="841">841</td><td class="pvtVal row55 col5 lastcol" data-value="561">561</td><td class="pvtVal row55 col6" data-value="1,217">1,217</td><td class="pvtVal row55 col7 last" data-value="1,338">1,338</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 14</div></th><td class="pvtVal row56 col0" data-value="2,667">2,667</td><td class="pvtVal row56 col1 lastcol" data-value="2,418">2,418</td><td class="pvtVal row56 col2" data-value="292">292</td><td class="pvtVal row56 col3 lastcol" data-value="207">207</td><td class="pvtVal row56 col4" data-value="923">923</td><td class="pvtVal row56 col5 lastcol" data-value="580">580</td><td class="pvtVal row56 col6" data-value="1,452">1,452</td><td class="pvtVal row56 col7 last" data-value="1,631">1,631</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 15</div></th><td class="pvtVal row57 col0" data-value="2,529">2,529</td><td class="pvtVal row57 col1 lastcol" data-value="2,453">2,453</td><td class="pvtVal row57 col2" data-value="296">296</td><td class="pvtVal row57 col3 lastcol" data-value="189">189</td><td class="pvtVal row57 col4" data-value="877">877</td><td class="pvtVal row57 col5 lastcol" data-value="558">558</td><td class="pvtVal row57 col6" data-value="1,356">1,356</td><td class="pvtVal row57 col7 last" data-value="1,706">1,706</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 16</div></th><td class="pvtVal row58 col0" data-value="2,128">2,128</td><td class="pvtVal row58 col1 lastcol" data-value="2,180">2,180</td><td class="pvtVal row58 col2" data-value="270">270</td><td class="pvtVal row58 col3 lastcol" data-value="156">156</td><td class="pvtVal row58 col4" data-value="723">723</td><td class="pvtVal row58 col5 lastcol" data-value="511">511</td><td class="pvtVal row58 col6" data-value="1,135">1,135</td><td class="pvtVal row58 col7 last" data-value="1,513">1,513</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 17</div></th><td class="pvtVal row59 col0" data-value="1,935">1,935</td><td class="pvtVal row59 col1 lastcol" data-value="1,975">1,975</td><td class="pvtVal row59 col2" data-value="283">283</td><td class="pvtVal row59 col3 lastcol" data-value="172">172</td><td class="pvtVal row59 col4" data-value="690">690</td><td class="pvtVal row59 col5 lastcol" data-value="465">465</td><td class="pvtVal row59 col6" data-value="962">962</td><td class="pvtVal row59 col7 last" data-value="1,338">1,338</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 18</div></th><td class="pvtVal row60 col0" data-value="1,674">1,674</td><td class="pvtVal row60 col1 lastcol" data-value="1,709">1,709</td><td class="pvtVal row60 col2" data-value="274">274</td><td class="pvtVal row60 col3 lastcol" data-value="171">171</td><td class="pvtVal row60 col4" data-value="569">569</td><td class="pvtVal row60 col5 lastcol" data-value="432">432</td><td class="pvtVal row60 col6" data-value="831">831</td><td class="pvtVal row60 col7 last" data-value="1,106">1,106</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 19</div></th><td class="pvtVal row61 col0" data-value="1,464">1,464</td><td class="pvtVal row61 col1 lastcol" data-value="1,525">1,525</td><td class="pvtVal row61 col2" data-value="235">235</td><td class="pvtVal row61 col3 lastcol" data-value="156">156</td><td class="pvtVal row61 col4" data-value="516">516</td><td class="pvtVal row61 col5 lastcol" data-value="399">399</td><td class="pvtVal row61 col6" data-value="713">713</td><td class="pvtVal row61 col7 last" data-value="970">970</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 20</div></th><td class="pvtVal row62 col0" data-value="1,419">1,419</td><td class="pvtVal row62 col1 lastcol" data-value="1,358">1,358</td><td class="pvtVal row62 col2" data-value="238">238</td><td class="pvtVal row62 col3 lastcol" data-value="136">136</td><td class="pvtVal row62 col4" data-value="485">485</td><td class="pvtVal row62 col5 lastcol" data-value="350">350</td><td class="pvtVal row62 col6" data-value="696">696</td><td class="pvtVal row62 col7 last" data-value="872">872</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 21</div></th><td class="pvtVal row63 col0" data-value="1,388">1,388</td><td class="pvtVal row63 col1 lastcol" data-value="1,382">1,382</td><td class="pvtVal row63 col2" data-value="230">230</td><td class="pvtVal row63 col3 lastcol" data-value="137">137</td><td class="pvtVal row63 col4" data-value="476">476</td><td class="pvtVal row63 col5 lastcol" data-value="329">329</td><td class="pvtVal row63 col6" data-value="682">682</td><td class="pvtVal row63 col7 last" data-value="916">916</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 22</div></th><td class="pvtVal row64 col0" data-value="1,330">1,330</td><td class="pvtVal row64 col1 lastcol" data-value="1,402">1,402</td><td class="pvtVal row64 col2" data-value="228">228</td><td class="pvtVal row64 col3 lastcol" data-value="143">143</td><td class="pvtVal row64 col4" data-value="491">491</td><td class="pvtVal row64 col5 lastcol" data-value="367">367</td><td class="pvtVal row64 col6" data-value="611">611</td><td class="pvtVal row64 col7 last" data-value="892">892</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 23</div></th><td class="pvtVal row65 col0" data-value="1,373">1,373</td><td class="pvtVal row65 col1 lastcol" data-value="1,309">1,309</td><td class="pvtVal row65 col2" data-value="226">226</td><td class="pvtVal row65 col3 lastcol" data-value="160">160</td><td class="pvtVal row65 col4" data-value="503">503</td><td class="pvtVal row65 col5 lastcol" data-value="332">332</td><td class="pvtVal row65 col6" data-value="644">644</td><td class="pvtVal row65 col7 last" data-value="817">817</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 24</div></th><td class="pvtVal row66 col0" data-value="1,314">1,314</td><td class="pvtVal row66 col1 lastcol" data-value="1,375">1,375</td><td class="pvtVal row66 col2" data-value="218">218</td><td class="pvtVal row66 col3 lastcol" data-value="187">187</td><td class="pvtVal row66 col4" data-value="518">518</td><td class="pvtVal row66 col5 lastcol" data-value="316">316</td><td class="pvtVal row66 col6" data-value="578">578</td><td class="pvtVal row66 col7 last" data-value="872">872</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 25</div></th><td class="pvtVal row67 col0" data-value="1,344">1,344</td><td class="pvtVal row67 col1 lastcol" data-value="1,352">1,352</td><td class="pvtVal row67 col2" data-value="227">227</td><td class="pvtVal row67 col3 lastcol" data-value="148">148</td><td class="pvtVal row67 col4" data-value="496">496</td><td class="pvtVal row67 col5 lastcol" data-value="359">359</td><td class="pvtVal row67 col6" data-value="621">621</td><td class="pvtVal row67 col7 last" data-value="845">845</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 26</div></th><td class="pvtVal row68 col0" data-value="1,317">1,317</td><td class="pvtVal row68 col1 lastcol" data-value="1,342">1,342</td><td class="pvtVal row68 col2" data-value="207">207</td><td class="pvtVal row68 col3 lastcol" data-value="174">174</td><td class="pvtVal row68 col4" data-value="478">478</td><td class="pvtVal row68 col5 lastcol" data-value="349">349</td><td class="pvtVal row68 col6" data-value="632">632</td><td class="pvtVal row68 col7 last" data-value="819">819</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 27</div></th><td class="pvtVal row69 col0" data-value="1,280">1,280</td><td class="pvtVal row69 col1 lastcol" data-value="1,358">1,358</td><td class="pvtVal row69 col2" data-value="231">231</td><td class="pvtVal row69 col3 lastcol" data-value="171">171</td><td class="pvtVal row69 col4" data-value="449">449</td><td class="pvtVal row69 col5 lastcol" data-value="360">360</td><td class="pvtVal row69 col6" data-value="600">600</td><td class="pvtVal row69 col7 last" data-value="827">827</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 28</div></th><td class="pvtVal row70 col0" data-value="1,218">1,218</td><td class="pvtVal row70 col1 lastcol" data-value="1,401">1,401</td><td class="pvtVal row70 col2" data-value="228">228</td><td class="pvtVal row70 col3 lastcol" data-value="162">162</td><td class="pvtVal row70 col4" data-value="449">449</td><td class="pvtVal row70 col5 lastcol" data-value="363">363</td><td class="pvtVal row70 col6" data-value="541">541</td><td class="pvtVal row70 col7 last" data-value="876">876</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 29</div></th><td class="pvtVal row71 col0" data-value="1,235">1,235</td><td class="pvtVal row71 col1 lastcol" data-value="1,293">1,293</td><td class="pvtVal row71 col2" data-value="222">222</td><td class="pvtVal row71 col3 lastcol" data-value="151">151</td><td class="pvtVal row71 col4" data-value="434">434</td><td class="pvtVal row71 col5 lastcol" data-value="341">341</td><td class="pvtVal row71 col6" data-value="579">579</td><td class="pvtVal row71 col7 last" data-value="801">801</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 30</div></th><td class="pvtVal row72 col0" data-value="1,319">1,319</td><td class="pvtVal row72 col1 lastcol" data-value="1,354">1,354</td><td class="pvtVal row72 col2" data-value="236">236</td><td class="pvtVal row72 col3 lastcol" data-value="171">171</td><td class="pvtVal row72 col4" data-value="459">459</td><td class="pvtVal row72 col5 lastcol" data-value="364">364</td><td class="pvtVal row72 col6" data-value="624">624</td><td class="pvtVal row72 col7 last" data-value="819">819</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 31</div></th><td class="pvtVal row73 col0" data-value="1,299">1,299</td><td class="pvtVal row73 col1 lastcol" data-value="1,367">1,367</td><td class="pvtVal row73 col2" data-value="220">220</td><td class="pvtVal row73 col3 lastcol" data-value="156">156</td><td class="pvtVal row73 col4" data-value="474">474</td><td class="pvtVal row73 col5 lastcol" data-value="367">367</td><td class="pvtVal row73 col6" data-value="605">605</td><td class="pvtVal row73 col7 last" data-value="844">844</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 32</div></th><td class="pvtVal row74 col0" data-value="1,321">1,321</td><td class="pvtVal row74 col1 lastcol" data-value="1,321">1,321</td><td class="pvtVal row74 col2" data-value="245">245</td><td class="pvtVal row74 col3 lastcol" data-value="175">175</td><td class="pvtVal row74 col4" data-value="467">467</td><td class="pvtVal row74 col5 lastcol" data-value="352">352</td><td class="pvtVal row74 col6" data-value="609">609</td><td class="pvtVal row74 col7 last" data-value="794">794</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 33</div></th><td class="pvtVal row75 col0" data-value="1,541">1,541</td><td class="pvtVal row75 col1 lastcol" data-value="1,668">1,668</td><td class="pvtVal row75 col2" data-value="273">273</td><td class="pvtVal row75 col3 lastcol" data-value="190">190</td><td class="pvtVal row75 col4" data-value="527">527</td><td class="pvtVal row75 col5 lastcol" data-value="401">401</td><td class="pvtVal row75 col6" data-value="741">741</td><td class="pvtVal row75 col7 last" data-value="1,077">1,077</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 34</div></th><td class="pvtVal row76 col0" data-value="1,422">1,422</td><td class="pvtVal row76 col1 lastcol" data-value="1,434">1,434</td><td class="pvtVal row76 col2" data-value="240">240</td><td class="pvtVal row76 col3 lastcol" data-value="177">177</td><td class="pvtVal row76 col4" data-value="524">524</td><td class="pvtVal row76 col5 lastcol" data-value="339">339</td><td class="pvtVal row76 col6" data-value="658">658</td><td class="pvtVal row76 col7 last" data-value="918">918</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 35</div></th><td class="pvtVal row77 col0" data-value="1,349">1,349</td><td class="pvtVal row77 col1 lastcol" data-value="1,386">1,386</td><td class="pvtVal row77 col2" data-value="200">200</td><td class="pvtVal row77 col3 lastcol" data-value="153">153</td><td class="pvtVal row77 col4" data-value="487">487</td><td class="pvtVal row77 col5 lastcol" data-value="378">378</td><td class="pvtVal row77 col6" data-value="662">662</td><td class="pvtVal row77 col7 last" data-value="855">855</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 36</div></th><td class="pvtVal row78 col0" data-value="1,331">1,331</td><td class="pvtVal row78 col1 lastcol" data-value="1,361">1,361</td><td class="pvtVal row78 col2" data-value="249">249</td><td class="pvtVal row78 col3 lastcol" data-value="167">167</td><td class="pvtVal row78 col4" data-value="488">488</td><td class="pvtVal row78 col5 lastcol" data-value="340">340</td><td class="pvtVal row78 col6" data-value="594">594</td><td class="pvtVal row78 col7 last" data-value="854">854</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 37</div></th><td class="pvtVal row79 col0" data-value="1,352">1,352</td><td class="pvtVal row79 col1 lastcol" data-value="1,390">1,390</td><td class="pvtVal row79 col2" data-value="226">226</td><td class="pvtVal row79 col3 lastcol" data-value="170">170</td><td class="pvtVal row79 col4" data-value="512">512</td><td class="pvtVal row79 col5 lastcol" data-value="386">386</td><td class="pvtVal row79 col6" data-value="614">614</td><td class="pvtVal row79 col7 last" data-value="834">834</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 38</div></th><td class="pvtVal row80 col0" data-value="1,375">1,375</td><td class="pvtVal row80 col1 lastcol" data-value="1,346">1,346</td><td class="pvtVal row80 col2" data-value="236">236</td><td class="pvtVal row80 col3 lastcol" data-value="159">159</td><td class="pvtVal row80 col4" data-value="519">519</td><td class="pvtVal row80 col5 lastcol" data-value="326">326</td><td class="pvtVal row80 col6" data-value="620">620</td><td class="pvtVal row80 col7 last" data-value="861">861</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 39</div></th><td class="pvtVal row81 col0" data-value="1,437">1,437</td><td class="pvtVal row81 col1 lastcol" data-value="1,454">1,454</td><td class="pvtVal row81 col2" data-value="232">232</td><td class="pvtVal row81 col3 lastcol" data-value="162">162</td><td class="pvtVal row81 col4" data-value="519">519</td><td class="pvtVal row81 col5 lastcol" data-value="361">361</td><td class="pvtVal row81 col6" data-value="686">686</td><td class="pvtVal row81 col7 last" data-value="931">931</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 40</div></th><td class="pvtVal row82 col0" data-value="1,503">1,503</td><td class="pvtVal row82 col1 lastcol" data-value="1,499">1,499</td><td class="pvtVal row82 col2" data-value="228">228</td><td class="pvtVal row82 col3 lastcol" data-value="206">206</td><td class="pvtVal row82 col4" data-value="535">535</td><td class="pvtVal row82 col5 lastcol" data-value="383">383</td><td class="pvtVal row82 col6" data-value="740">740</td><td class="pvtVal row82 col7 last" data-value="910">910</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 41</div></th><td class="pvtVal row83 col0" data-value="1,573">1,573</td><td class="pvtVal row83 col1 lastcol" data-value="1,449">1,449</td><td class="pvtVal row83 col2" data-value="211">211</td><td class="pvtVal row83 col3 lastcol" data-value="168">168</td><td class="pvtVal row83 col4" data-value="589">589</td><td class="pvtVal row83 col5 lastcol" data-value="401">401</td><td class="pvtVal row83 col6" data-value="773">773</td><td class="pvtVal row83 col7 last" data-value="880">880</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 42</div></th><td class="pvtVal row84 col0" data-value="1,615">1,615</td><td class="pvtVal row84 col1 lastcol" data-value="1,607">1,607</td><td class="pvtVal row84 col2" data-value="240">240</td><td class="pvtVal row84 col3 lastcol" data-value="192">192</td><td class="pvtVal row84 col4" data-value="581">581</td><td class="pvtVal row84 col5 lastcol" data-value="406">406</td><td class="pvtVal row84 col6" data-value="794">794</td><td class="pvtVal row84 col7 last" data-value="1,009">1,009</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 43</div></th><td class="pvtVal row85 col0" data-value="1,809">1,809</td><td class="pvtVal row85 col1 lastcol" data-value="1,639">1,639</td><td class="pvtVal row85 col2" data-value="253">253</td><td class="pvtVal row85 col3 lastcol" data-value="172">172</td><td class="pvtVal row85 col4" data-value="645">645</td><td class="pvtVal row85 col5 lastcol" data-value="435">435</td><td class="pvtVal row85 col6" data-value="911">911</td><td class="pvtVal row85 col7 last" data-value="1,032">1,032</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 44</div></th><td class="pvtVal row86 col0" data-value="1,865">1,865</td><td class="pvtVal row86 col1 lastcol" data-value="1,822">1,822</td><td class="pvtVal row86 col2" data-value="248">248</td><td class="pvtVal row86 col3 lastcol" data-value="161">161</td><td class="pvtVal row86 col4" data-value="690">690</td><td class="pvtVal row86 col5 lastcol" data-value="476">476</td><td class="pvtVal row86 col6" data-value="927">927</td><td class="pvtVal row86 col7 last" data-value="1,185">1,185</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 45</div></th><td class="pvtVal row87 col0" data-value="1,856">1,856</td><td class="pvtVal row87 col1 lastcol" data-value="1,733">1,733</td><td class="pvtVal row87 col2" data-value="256">256</td><td class="pvtVal row87 col3 lastcol" data-value="178">178</td><td class="pvtVal row87 col4" data-value="690">690</td><td class="pvtVal row87 col5 lastcol" data-value="421">421</td><td class="pvtVal row87 col6" data-value="910">910</td><td class="pvtVal row87 col7 last" data-value="1,134">1,134</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 46</div></th><td class="pvtVal row88 col0" data-value="1,802">1,802</td><td class="pvtVal row88 col1 lastcol" data-value="1,778">1,778</td><td class="pvtVal row88 col2" data-value="256">256</td><td class="pvtVal row88 col3 lastcol" data-value="179">179</td><td class="pvtVal row88 col4" data-value="620">620</td><td class="pvtVal row88 col5 lastcol" data-value="439">439</td><td class="pvtVal row88 col6" data-value="926">926</td><td class="pvtVal row88 col7 last" data-value="1,160">1,160</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 47</div></th><td class="pvtVal row89 col0" data-value="1,704">1,704</td><td class="pvtVal row89 col1 lastcol" data-value="1,631">1,631</td><td class="pvtVal row89 col2" data-value="244">244</td><td class="pvtVal row89 col3 lastcol" data-value="173">173</td><td class="pvtVal row89 col4" data-value="643">643</td><td class="pvtVal row89 col5 lastcol" data-value="440">440</td><td class="pvtVal row89 col6" data-value="817">817</td><td class="pvtVal row89 col7 last" data-value="1,018">1,018</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 48</div></th><td class="pvtVal row90 col0" data-value="1,735">1,735</td><td class="pvtVal row90 col1 lastcol" data-value="1,670">1,670</td><td class="pvtVal row90 col2" data-value="271">271</td><td class="pvtVal row90 col3 lastcol" data-value="165">165</td><td class="pvtVal row90 col4" data-value="640">640</td><td class="pvtVal row90 col5 lastcol" data-value="443">443</td><td class="pvtVal row90 col6" data-value="824">824</td><td class="pvtVal row90 col7 last" data-value="1,062">1,062</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 49</div></th><td class="pvtVal row91 col0" data-value="1,770">1,770</td><td class="pvtVal row91 col1 lastcol" data-value="1,760">1,760</td><td class="pvtVal row91 col2" data-value="271">271</td><td class="pvtVal row91 col3 lastcol" data-value="175">175</td><td class="pvtVal row91 col4" data-value="641">641</td><td class="pvtVal row91 col5 lastcol" data-value="471">471</td><td class="pvtVal row91 col6" data-value="858">858</td><td class="pvtVal row91 col7 last" data-value="1,114">1,114</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 50</div></th><td class="pvtVal row92 col0" data-value="1,850">1,850</td><td class="pvtVal row92 col1 lastcol" data-value="1,765">1,765</td><td class="pvtVal row92 col2" data-value="277">277</td><td class="pvtVal row92 col3 lastcol" data-value="187">187</td><td class="pvtVal row92 col4" data-value="656">656</td><td class="pvtVal row92 col5 lastcol" data-value="447">447</td><td class="pvtVal row92 col6" data-value="917">917</td><td class="pvtVal row92 col7 last" data-value="1,131">1,131</td></tr><tr class="odd"><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 51</div></th><td class="pvtVal row93 col0" data-value="1,955">1,955</td><td class="pvtVal row93 col1 lastcol" data-value="1,954">1,954</td><td class="pvtVal row93 col2" data-value="262">262</td><td class="pvtVal row93 col3 lastcol" data-value="210">210</td><td class="pvtVal row93 col4" data-value="709">709</td><td class="pvtVal row93 col5 lastcol" data-value="479">479</td><td class="pvtVal row93 col6" data-value="984">984</td><td class="pvtVal row93 col7 last" data-value="1,265">1,265</td></tr><tr><th class="pvtRowLabel notopics" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 52</div></th><td class="pvtVal row94 col0" data-value="1,911">1,911</td><td class="pvtVal row94 col1 lastcol" data-value="1,956">1,956</td><td class="pvtVal row94 col2" data-value="257">257</td><td class="pvtVal row94 col3 lastcol" data-value="175">175</td><td class="pvtVal row94 col4" data-value="673">673</td><td class="pvtVal row94 col5 lastcol" data-value="473">473</td><td class="pvtVal row94 col6" data-value="981">981</td><td class="pvtVal row94 col7 last" data-value="1,308">1,308</td></tr><tr class="odd last"><th class="pvtRowLabel notopics last" rowspan="1" colspan="2"><div data-placement="auto" data-original-title="" title="">2020 week 53 (4 days)</div></th><td class="pvtVal row95 col0" data-value="1,220">1,220</td><td class="pvtVal row95 col1 lastcol" data-value="1,149">1,149</td><td class="pvtVal row95 col2" data-value="165">165</td><td class="pvtVal row95 col3 lastcol" data-value="109">109</td><td class="pvtVal row95 col4" data-value="474">474</td><td class="pvtVal row95 col5 lastcol" data-value="292">292</td><td class="pvtVal row95 col6" data-value="581">581</td><td class="pvtVal row95 col7 last" data-value="748">748</td></tr></tbody></table><div class="source">Source: CBS</div></body></html><div style="height: 50px;"></div><div style="font-size: 8pt;margin-left: 12px;border-top: 1px solid grey;"><h2 style="margin-top: 1.5em;">Table explanation</h2><div><pre>CONTENTS
+
+1. General information
+2. Definitions and explanation of symbols
+3. Links to relevant tables and articles
+4. Sources and methods
+5. Further information
+
+1. GENERAL INFORMATION
+
+This table contains provisional data on the number of deaths among the population of the Netherlands.
+
+The data can be broken down by gender and age group.
+
+Data available from: 1995
+
+Status of the figures:
+The figures for the years 1995 to 2020 inclusive are final.
+The figures for 2021 and 2022 are provisional. These figures may change with each renewal of the publication due to the fact that death registrations received later are still included. As this method is different from the method used for monthly mortality figures, minor discrepancies may occur.
+
+Changes as of 21 January 2022:
+Provisional figures of week 1 and 2 of 2022 have been added.
+The provisional figures of week 2 of 2022 are estimated. This estimate is based on the number of death reports that CBS has received so far for week 2.
+
+When will new figures be published?
+Every week, provisional figures over the previous week are included in this publication.
+
+2. DEFINITIONS AND EXPLANATION OF SYMBOLS
+
+Definitions:
+
+Age
+The number of whole years that have passed between someone’s date of birth and 31 December of the year of death, calculated as the reference year minus the year of birth.
+
+Deceased person
+Person confirmed dead by an authorised medical practitioner by the signing of a death certificate.
+
+Population
+The total number of people residing in a given area.
+Only persons recorded in the population register of a Dutch municipality are included in the population. In principle, every person who lives in the Netherlands for an indefinite period is included in the population register of the municipality. Persons belonging to the population of the Netherlands for whom no permanent place of residence can be designated, are included in the population register of the municipality of The Hague. The population registers do not include the persons living in the Netherlands to whom exemption rules apply with regard to inclusion in the population registers (for example diplomats and NATO military personnel) and persons without legal residence in the Netherlands.
+
+Explanation of symbols:
+
+Empty cell	: figure not applicable
+. 		: figure is unknown, insufficiently reliable or confidential
+*		: provisional figure 
+**		: revised provisional figure
+
+3. LINKS TO RELEVANT TABLES AND ARTICLES
+
+Relevant table: 
+<a href="https://opendata.cbs.nl/statline/#/CBS/en/dataset/37979eng">Mortality; key figures</a>
+
+Relevant articles:
+News items <a href="https://www.cbs.nl/en-gb/series/mortality-per-week">Mortality per week</a> 
+
+More information can be found in the theme <a href="https://www.cbs.nl/en-gb/society/population">Population</a>. 
+
+4. SOURCES AND METHODS
+
+Break in series of late reports 
+Up to 2010, reports of events in a certain year received at Statistics Netherlands after 15 February of the following year - the so-called late reports - were ignored. As a result of an improvement in the production method, late reports received in the year of publication will be included in the figures for the year of publication.
+
+Population
+The observations are based on information received from the municipal population registers.
+
+Accuracy and reliability 
+In a limited number of cases the data received by Statistics Netherlands are incomplete. In such cases the missing data are estimated.
+
+More information can be found in <a href="https://www.cbs.nl/nl-nl/onze-diensten/methoden/onderzoeksomschrijvingen/korte-onderzoeksbeschrijvingen/bevolkingsstatistiek">Bevolkingsstatistiek</a>. (Dutch only).
+
+Data from 2014 in this table are derived from <a href="https://www.cbs.nl/nl-nl/onze-diensten/methoden/onderzoeksomschrijvingen/korte-onderzoeksbeschrijvingen/stelsel-van-sociaal-statistische-bestanden--ssb--">Stelsel van Sociaal-statistische Bestanden (SSB)</a>. (Dutch only).
+
+5. FURTHER INFORMATION
+
+<a href="https://www.cbs.nl/en-gb/about-us/contact/infoservice">Infoservice</a>
+
+Copyright (c) Statistics Netherlands, The Hague/Heerlen
+Reproduction is permitted, provided Statistics Netherlands is quoted as the source. </pre></div></div><div style="font-size: 8pt;margin-left: 12px;border-top: 1px solid grey;"><h2 style="margin-top: 1.5em;">Topics/classifications</h2><ul><li><h5 class="onderwerp">Topics</h5><ul><li><h5 class="onderwerp">Deaths</h5><pre style="background-color: inherit; padding: 0; border: none;">Number of deceased persons who were counted among the population of the Netherlands.
+
+Deceased person 
+Person confirmed dead by an authorised medical practitioner by the signing of a death certificate.
+
+Population
+The total number of people residing in a given area.
+Only persons recorded in the population register of a Dutch municipality are included in the population. In principle, every person who lives in the Netherlands for an indefinite period is included in the population register of the municipality. Persons belonging to the population of the Netherlands for whom no permanent place of residence can be designated, are included in the population register of the municipality of The Hague. The population registers do not include the persons living in the Netherlands to whom exemption rules apply with regard to inclusion in the population registers (for example diplomats and NATO military personnel) and persons without legal residence in the Netherlands.
+</pre><ul></ul></li></ul></li></ul><ul><li><h5 class="onderwerp">Sex</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul><li><h5 class="onderwerp">Male</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">Female</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li></ul></li><li><h5 class="onderwerp">Age, 31 December</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul><li><h5 class="onderwerp">Total</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">0 to 64 years</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">65 to 79 years</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">80 years or older</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li></ul></li><li><h5 class="onderwerp">Periods</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul><li><h5 class="onderwerp">2019 week 11</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 12</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 13</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 14</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 15</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 16</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 17</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 18</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 19</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 20</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 21</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 22</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 23</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 24</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 25</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 26</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 27</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 28</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 29</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 30</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 31</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 32</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 33</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 34</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 35</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 36</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 37</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 38</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 39</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 40</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 41</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 42</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 43</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 44</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 45</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 46</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 47</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 48</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 49</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 50</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 51</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 52</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2019 week 53 (2 days)</h5><pre style="background-color: inherit; padding: 0; border: none;">Relates to 2 days of 2019 that fall in week 1 of 2020.</pre><ul></ul></li><li><h5 class="onderwerp">2020 week 1 (5 days)</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 2</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 3</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 4</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 5</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 6</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 7</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 8</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 9</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 10</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 11</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 12</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 13</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 14</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 15</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 16</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 17</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 18</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 19</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 20</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 21</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 22</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 23</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 24</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 25</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 26</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 27</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 28</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 29</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 30</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 31</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 32</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 33</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 34</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 35</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 36</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 37</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 38</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 39</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 40</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 41</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 42</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 43</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 44</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 45</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 46</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 47</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 48</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 49</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 50</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 51</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 52</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li><li><h5 class="onderwerp">2020 week 53 (4 days)</h5><pre style="background-color: inherit; padding: 0; border: none;"></pre><ul></ul></li></ul></li></ul></div>
